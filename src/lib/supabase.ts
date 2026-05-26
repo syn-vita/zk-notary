@@ -132,6 +132,12 @@ export async function getProfileByUserId(userId: string): Promise<UserProfile | 
   return data ? fromDatabaseProfileRow(data) : null;
 }
 
+export async function requireProfileDisplayName(userId: string): Promise<string | null> {
+  const profile = await getProfileByUserId(userId);
+  const displayName = profile?.displayName.trim();
+  return displayName ? displayName : null;
+}
+
 export async function upsertProfile(input: {
   userId: string;
   displayName: string;

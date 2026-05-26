@@ -48,6 +48,7 @@ function buildPrintDocument(record: PublicAttestationRecord, variant: "certifica
       <p>This document confirms that zkNotary recorded a wallet-authorized attestation for a file hash on Ethereum Sepolia. It does not by itself prove authorship, truthfulness, or legal enforceability.</p>
       <dl>
         ${[
+          ["Owner-provided public name", record.publicDisplayName ?? "Not shared"],
           ["Attestation reference", record.attestationRef],
           ["Document hash", record.documentHash],
           ["Wallet", record.attestingWallet],

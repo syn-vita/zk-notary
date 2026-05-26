@@ -25,6 +25,7 @@ export const notarizeSubmissionSchema = z.object({
   fileType: z.string().nullable(),
   description: z.string().trim().max(280).nullable(),
   tags: z.array(z.string().trim().min(1).max(40)).max(8),
+  shareDisplayNamePublicly: z.boolean(),
   nonce: z.string().min(1)
 });
 

@@ -74,6 +74,7 @@ export function VerificationCertificate({
 
       <dl className="mt-8 grid gap-4 md:grid-cols-2">
         {[
+          ["Owner-provided public name", record.publicDisplayName ?? "Not shared"],
           ["Attestation reference", record.attestationRef],
           ["Document hash", record.documentHash],
           ["Wallet", record.attestingWallet],

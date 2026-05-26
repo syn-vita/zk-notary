@@ -3,6 +3,7 @@ import { Wallet } from "ethers";
 
 import {
   classifyDuplicateStatus,
+  notarizeSubmissionSchema,
   resolveAttestationChainId,
   normalizeTags,
   verifyAuthorizationSignature
@@ -70,5 +71,26 @@ describe("notarize helpers", () => {
         blockChainId: undefined
       })
     ).to.equal(11155111);
+  });
+
+  it("accepts the public display name opt-in flag in the submission schema", () => {
+    expect(
+      notarizeSubmissionSchema.parse({
+        userId: "user-1",
+        documentHash:
+          "0xb7bde3a1cc4b825984e69218cca147967cb2757ea463aec9e3d42730f03be578",
+        walletAddress: "0x1234000000000000000000000000000000005678",
+        authorizationMessage: "Authorize",
+        authorizationSignature: "0x1234",
+        authorizationDigest:
+          "0xb7bde3a1cc4b825984e69218cca147967cb2757ea463aec9e3d42730f03be578",
+        fileName: "resume.pdf",
+        fileType: "application/pdf",
+        description: null,
+        tags: ["Personal"],
+        shareDisplayNamePublicly: false,
+        nonce: "nonce-1"
+      }).shareDisplayNamePublicly
+    ).to.equal(false);
   });
 });

@@ -22,6 +22,7 @@ export type AttestationRecord = {
   fileType: string | null;
   description: string | null;
   tags: string[];
+  publicDisplayName: string | null;
   status: AttestationRecordStatus;
   publicSupersededNote: string | null;
   privateSupersededNote: string | null;
@@ -33,6 +34,7 @@ export type PublicAttestationRecord = {
   attestationRef: string;
   documentHash: string;
   attestingWallet: string;
+  publicDisplayName: string | null;
   chainId: number;
   networkName: string;
   txHash: string;
@@ -62,6 +64,10 @@ export type NotarizeResponse = {
   notarizedAt: string;
   walletAddress: string;
   documentHash: string;
+};
+
+export type NotarizeProfileResponse = {
+  profile: UserProfile | null;
 };
 
 export type VerificationLookupResponse = {

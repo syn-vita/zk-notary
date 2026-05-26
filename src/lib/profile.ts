@@ -22,3 +22,15 @@ export function resolveOwnerDisplayName(input: {
 }): string {
   return input.profile?.displayName.trim() || input.walletAddress || "Your account";
 }
+
+export function resolvePublicDisplayNameSnapshot(input: {
+  profile: UserProfile | null;
+  shareDisplayNamePublicly: boolean;
+}): string | null {
+  if (!input.shareDisplayNamePublicly) {
+    return null;
+  }
+
+  const displayName = input.profile?.displayName.trim();
+  return displayName ? displayName : null;
+}

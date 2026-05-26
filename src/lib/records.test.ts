@@ -28,6 +28,7 @@ function createRecord(
     fileType: "application/pdf",
     description: "Supporting record",
     tags: ["Legal", "Archive"],
+    publicDisplayName: null,
     status: "active",
     publicSupersededNote: null,
     privateSupersededNote: null,
@@ -57,6 +58,7 @@ describe("record privacy helpers", () => {
       file_type: "application/pdf",
       description: "Supporting record",
       tags: ["Legal", "Archive"],
+      public_display_name: "Giancarlo",
       status: "active",
       public_superseded_note: null,
       private_superseded_note: null,
@@ -71,6 +73,7 @@ describe("record privacy helpers", () => {
       "0xb7bde3a1cc4b825984e69218cca147967cb2757ea463aec9e3d42730f03be578"
     );
     expect(record.fileName).to.equal("evidence.pdf");
+    expect(record.publicDisplayName).to.equal("Giancarlo");
     expect(record.publicSupersededNote).to.equal(null);
   });
 

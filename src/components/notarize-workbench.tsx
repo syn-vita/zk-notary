@@ -7,19 +7,30 @@ import { usePrivy, useSignMessage, useWallets } from "@privy-io/react-auth";
 
 import { TrustBanner } from "@/components/trust-banner";
 import { buildAuthorizationMessage, createAttestationReference } from "@/lib/attestations";
-import { type DuplicateCheckResponse, type NotarizeResponse } from "@/lib/domain";
+import {
+  type DuplicateCheckResponse,
+  type NotarizeProfileResponse,
+  type NotarizeResponse,
+  type UserProfile
+} from "@/lib/domain";
 import { publicEnv } from "@/lib/env";
 import { hashFile } from "@/lib/hash";
 import {
   computeAuthorizationDigest,
   normalizeTags
 } from "@/lib/notarize";
+import { resolvePublicDisplayNameSnapshot } from "@/lib/profile";
 
 type HashState =
   | { status: "idle"; progress: 0; hash: null; error: null }
   | { status: "hashing"; progress: number; hash: null; error: null }
   | { status: "ready"; progress: 100; hash: string; error: null }
   | { status: "error"; progress: number; hash: null; error: string };
+
+type ProfileState =
+  | { status: "idle" | "loading"; profile: UserProfile | null; error: null }
+  | { status: "ready"; profile: UserProfile | null; error: null }
+  | { status: "error"; profile: UserProfile | null; error: string };
 
 const duplicateMessages: Record<DuplicateCheckResponse["status"], string> = {
   "not-found": "No prior attestations found for this hash.",
@@ -125,6 +136,75 @@ function NotarizeFlow() {
     "idle" | "authorizing" | "submitting" | "success" | "error"
   >("idle");
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [profileState, setProfileState] = useState<ProfileState>({
+    status: "idle",
+    profile: null,
+    error: null
+  });
+  const [shareDisplayNamePublicly, setShareDisplayNamePublicly] = useState(false);
+
+  useEffect(() => {
+    if (!ready || !authenticated) {
+      setProfileState({
+        status: "idle",
+        profile: null,
+        error: null
+      });
+      setShareDisplayNamePublicly(false);
+      return;
+    }
+
+    let active = true;
+    setProfileState({
+      status: "loading",
+      profile: null,
+      error: null
+    });
+
+    void getAccessToken()
+      .then((token) => {
+        if (!token) {
+          throw new Error("Missing Privy access token.");
+        }
+
+        return fetch("/api/dashboard/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      })
+      .then(async (response) => {
+        const payload = (await response.json()) as NotarizeProfileResponse | { error: string };
+        if (!response.ok || "error" in payload) {
+          throw new Error("error" in payload ? payload.error : "Could not load profile.");
+        }
+
+        if (!active) {
+          return;
+        }
+
+        setProfileState({
+          status: "ready",
+          profile: payload.profile,
+          error: null
+        });
+      })
+      .catch((error: unknown) => {
+        if (!active) {
+          return;
+        }
+
+        setProfileState({
+          status: "error",
+          profile: null,
+          error: error instanceof Error ? error.message : "Could not load profile."
+        });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authenticated, getAccessToken, ready]);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -317,6 +397,7 @@ function NotarizeFlow() {
           fileType: selectedFile.type || null,
           description: description.trim() || null,
           tags: normalizeTags(tagInput),
+          shareDisplayNamePublicly,
           nonce
         })
       });
@@ -431,6 +512,50 @@ function NotarizeFlow() {
                 {normalizeTags(tagInput).join(" · ") || "No tags yet"}
               </p>
             </label>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Public display name
+                </p>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  Optionally attach your current private display name to this single
+                  attestation. The name is copied as a public snapshot only for this
+                  record and will not change if you edit your profile later.
+                </p>
+              </div>
+              <label className="inline-flex items-center gap-3 text-sm font-medium text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={shareDisplayNamePublicly}
+                  disabled={!resolvePublicDisplayNameSnapshot({
+                    profile: profileState.profile,
+                    shareDisplayNamePublicly: true
+                  })}
+                  onChange={(event) => setShareDisplayNamePublicly(event.currentTarget.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                Share name publicly
+              </label>
+            </div>
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              {profileState.status === "loading"
+                ? "Loading your saved private display name..."
+                : profileState.profile?.displayName
+                  ? `Current private display name: ${profileState.profile.displayName}`
+                  : "No private display name is saved yet. Add one in your dashboard before opting in."}
+            </div>
+            {profileState.status === "error" ? (
+              <p className="mt-3 text-sm text-rose-700">{profileState.error}</p>
+            ) : null}
+            {!profileState.profile?.displayName ? (
+              <p className="mt-3 text-sm text-slate-600">
+                You can save a private display name from the dashboard and then choose
+                whether to expose it on future attestations.
+              </p>
+            ) : null}
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4">

@@ -40,6 +40,7 @@ export function ReceiptCard({ record }: ReceiptCardProps) {
 
       <dl className="mt-8 grid gap-4 md:grid-cols-2">
         {[
+          ["Owner-provided public name", record.publicDisplayName ?? "Not shared"],
           ["Attestation reference", record.attestationRef],
           ["Wallet", record.attestingWallet],
           ["Transaction", record.txHash],

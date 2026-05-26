@@ -1,6 +1,10 @@
 import { expect } from "chai";
 
-import { fromDatabaseProfileRow, resolveOwnerDisplayName } from "./profile.ts";
+import {
+  fromDatabaseProfileRow,
+  resolveOwnerDisplayName,
+  resolvePublicDisplayNameSnapshot
+} from "./profile.ts";
 
 describe("profile helpers", () => {
   it("normalizes snake_case profile rows into the app profile shape", () => {
@@ -37,5 +41,31 @@ describe("profile helpers", () => {
         walletAddress: "0x1234"
       })
     ).to.equal("0x1234");
+  });
+
+  it("returns a public snapshot only when the user opted in", () => {
+    expect(
+      resolvePublicDisplayNameSnapshot({
+        profile: {
+          userId: "user-1",
+          displayName: "Giancarlo",
+          createdAt: "2026-05-26T12:00:00.000Z",
+          updatedAt: "2026-05-26T12:05:00.000Z"
+        },
+        shareDisplayNamePublicly: true
+      })
+    ).to.equal("Giancarlo");
+
+    expect(
+      resolvePublicDisplayNameSnapshot({
+        profile: {
+          userId: "user-1",
+          displayName: "Giancarlo",
+          createdAt: "2026-05-26T12:00:00.000Z",
+          updatedAt: "2026-05-26T12:05:00.000Z"
+        },
+        shareDisplayNamePublicly: false
+      })
+    ).to.equal(null);
   });
 });

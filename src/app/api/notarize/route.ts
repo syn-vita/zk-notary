@@ -11,7 +11,7 @@ import {
   verifyAuthorizationSignature
 } from "@/lib/notarize";
 import { getPrivyServerClient } from "@/lib/privy-server";
-import { getServiceSupabaseClient } from "@/lib/supabase";
+import { getServiceSupabaseClient, requireProfileDisplayName } from "@/lib/supabase";
 import { getReadContract, getWriteContract, zkNotaryAbi } from "@/lib/zknotary-contract";
 
 export async function POST(request: Request) {
@@ -107,6 +107,19 @@ export async function POST(request: Request) {
       configuredChainId: publicEnv.NEXT_PUBLIC_CHAIN_ID,
       blockChainId: block.chainId
     });
+    const publicDisplayName = payload.shareDisplayNamePublicly
+      ? await requireProfileDisplayName(payload.userId)
+      : null;
+
+    if (payload.shareDisplayNamePublicly && !publicDisplayName) {
+      return NextResponse.json(
+        {
+          error:
+            "Save a private display name in your dashboard before sharing it on a public attestation."
+        },
+        { status: 409 }
+      );
+    }
 
     const attestationRef = createAttestationReference({
       chainId,
@@ -129,6 +142,7 @@ export async function POST(request: Request) {
       fileType: payload.fileType,
       description: payload.description,
       tags: payload.tags,
+      publicDisplayName,
       status: "active",
       publicSupersededNote: null,
       privateSupersededNote: null,
@@ -149,6 +163,7 @@ export async function POST(request: Request) {
       file_type: record.fileType,
       description: record.description,
       tags: record.tags,
+      public_display_name: record.publicDisplayName,
       status: record.status,
       public_superseded_note: record.publicSupersededNote,
       private_superseded_note: record.privateSupersededNote,

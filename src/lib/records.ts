@@ -15,6 +15,7 @@ export type DatabaseAttestationRow = {
   file_type: string | null;
   description: string | null;
   tags: string[] | null;
+  public_display_name: string | null;
   status: AttestationRecord["status"];
   public_superseded_note: string | null;
   private_superseded_note: string | null;
@@ -40,6 +41,7 @@ export function fromDatabaseAttestationRow(
     fileType: row.file_type,
     description: row.description,
     tags: row.tags ?? [],
+    publicDisplayName: row.public_display_name,
     status: row.status,
     publicSupersededNote: row.public_superseded_note,
     privateSupersededNote: row.private_superseded_note,
@@ -55,6 +57,7 @@ export function toPublicAttestationView(
     attestationRef: record.attestationRef,
     documentHash: record.documentHash,
     attestingWallet: record.attestingWallet,
+    publicDisplayName: record.publicDisplayName,
     chainId: record.chainId,
     networkName: record.networkName,
     txHash: record.txHash,
