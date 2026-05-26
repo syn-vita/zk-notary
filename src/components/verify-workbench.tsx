@@ -262,11 +262,9 @@ export function VerifyWorkbench() {
         body="zkNotary verifies that a wallet-authorized attestation for a specific file hash exists on Sepolia. It does not prove authorship, truthfulness, or legal status by itself."
       />
 
-      <VerificationExplainer
-        outcome={
-          lookupState.status === "ready" ? lookupState.data.outcome : "exact-attestation"
-        }
-      />
+      {lookupState.status === "ready" ? (
+        <VerificationExplainer outcome={lookupState.data.outcome} />
+      ) : null}
     </div>
   );
 }
