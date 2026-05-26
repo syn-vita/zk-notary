@@ -61,13 +61,13 @@ export function PageShell({
         <nav className="ml-auto flex items-center gap-5">
           <Link
             href="/verify"
-            className={`text-[0.8125rem] transition ${pathname === "/verify" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
+            className={`hidden sm:block text-[0.8125rem] transition ${pathname === "/verify" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
           >
             Verify
           </Link>
           <Link
             href="/dashboard"
-            className={`text-[0.8125rem] transition ${pathname === "/dashboard" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
+            className={`hidden sm:block text-[0.8125rem] transition ${pathname === "/dashboard" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
           >
             Dashboard
           </Link>
