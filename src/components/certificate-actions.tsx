@@ -100,15 +100,15 @@ export function CertificateActions({
         <button
           type="button"
           onClick={handlePrint}
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
+          className="rounded-btn bg-action px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
         >
           Save or print PDF
         </button>
-        <span className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-600">
+        <span className="inline-flex rounded-btn border border-ui-border px-4 py-2 text-[0.75rem] text-ink-secondary">
           {buildCertificateExportName(record)}
         </span>
       </div>
-      {error ? <p className="mt-3 text-sm text-rose-700">{error}</p> : null}
+      {error ? <p className="mt-3 text-[0.875rem] text-ui-error">{error}</p> : null}
     </div>
   );
 }

@@ -10,20 +10,20 @@ const copy = {
   "superseded-valid":
     "The chain proof is still valid, but the attestation owner has marked this record as superseded in the application layer.",
   "not-found":
-    "No matching attestation record was found for the supplied reference or file hash."
+    "No matching attestation record was found for the supplied reference or file hash.",
 } as const;
 
 export function VerificationExplainer({ outcome }: VerificationExplainerProps) {
   return (
-    <details className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
-      <summary className="cursor-pointer text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+    <details className="mt-8 rounded-card border border-ui-border bg-base p-6 shadow-card">
+      <summary className="cursor-pointer text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-action">
         Verification explainer
       </summary>
-      <p className="mt-4 text-sm leading-6 text-slate-600">{copy[outcome]}</p>
-      <p className="mt-3 text-sm leading-6 text-slate-600">
-        zkNotary proves that a wallet-authorized attestation for this file hash was
-        recorded on Sepolia. It does not prove authorship, truthfulness, or legal
-        validity by itself.
+      <p className="mt-4 text-[0.875rem] leading-6 text-ink-secondary">{copy[outcome]}</p>
+      <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
+        zkNotary proves that a wallet-authorized attestation for this file hash
+        was recorded on Sepolia. It does not prove authorship, truthfulness, or
+        legal validity by itself.
       </p>
     </details>
   );
