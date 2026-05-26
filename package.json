@@ -1,0 +1,37 @@
+{
+  "name": "zknotary",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "npm.cmd run test:unit && npm.cmd run test:contracts",
+    "test:unit": "mocha --require ts-node/register --extension ts \"src/**/*.test.ts\"",
+    "test:contracts": "hardhat test"
+  },
+  "dependencies": {
+    "@farcaster/mini-app-solana": "^1.1.3",
+    "@privy-io/node": "^0.19.0",
+    "@privy-io/react-auth": "^3.8.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "clsx": "^2.1.1",
+    "ethers": "^6.13.4",
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.20",
+    "hardhat": "^2.22.16",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
+  }
+}
