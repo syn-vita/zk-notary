@@ -76,9 +76,9 @@ export function CertificateActions({
   function handlePrint() {
     try {
       setError(null);
-      const printWindow = window.open("", "_blank", "noopener,noreferrer,width=900,height=700");
+      const printWindow = window.open("", "_blank", "width=900,height=700");
       if (!printWindow) {
-        throw new Error("The browser blocked the print window.");
+        throw new Error("The browser did not allow the print window to open.");
       }
 
       printWindow.document.open();
