@@ -5,12 +5,11 @@ type TrustBannerProps = {
 
 export function TrustBanner({ title, body }: TrustBannerProps) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
-        Trust note
+    <div className="mt-8 border-t border-ui-border pt-6">
+      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+        {title}
       </p>
-      <h2 className="mt-2 text-lg font-semibold text-slate-950">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
+      <p className="mt-2 text-[0.8125rem] leading-6 text-muted">{body}</p>
     </div>
   );
 }
