@@ -1,80 +1,92 @@
 import Link from "next/link";
 
-import { TrustBanner } from "@/components/trust-banner";
+import { PageShell } from "@/components/page-shell";
 
-const actions = [
-  { href: "/notarize", label: "Notarize a document" },
-  { href: "/verify", label: "Verify an attestation" },
-  { href: "/dashboard", label: "Open your dashboard" }
+const steps = [
+  {
+    num: "01",
+    title: "Hash locally",
+    body: "The original file never leaves the browser. zkNotary only works from the cryptographic hash.",
+  },
+  {
+    num: "02",
+    title: "Sign intent",
+    body: "Your wallet signs a plain-English authorization message before the platform relays the record.",
+  },
+  {
+    num: "03",
+    title: "Verify later",
+    body: "Anyone can inspect the attestation certificate, wallet, timestamp, and chain reference.",
+  },
 ];
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-10 px-6 py-10 lg:px-10">
-      <header className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-blue-700">
-            zkNotary beta
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold text-slate-950 sm:text-5xl">
-            Wallet-authorized evidence records for files that stay local.
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
-            zkNotary creates cryptographic proof of a document hash, the wallet that
-            authorized it, and when it was attested on Ethereum Sepolia. It is built
-            for evidence workflows, not as a licensed legal notary service.
-          </p>
-        </div>
-      </header>
-
-      <section className="grid gap-4 md:grid-cols-3">
-        {actions.map((action) => (
+    <PageShell>
+      {/* Hero */}
+      <section className="border-b border-ui-border pb-12 pt-16">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          Ethereum Sepolia · Beta
+        </p>
+        <h1 className="mt-4 text-[clamp(1.75rem,4vw,2.5rem)] font-extrabold leading-[1.15] tracking-[-0.025em] text-ink">
+          Wallet-authorized evidence records.
+        </h1>
+        <p className="mt-4 max-w-2xl text-[0.9375rem] leading-7 text-ink-secondary">
+          Hash locally in your browser. Sign with your wallet. Get an immutable
+          on-chain record — with a public proof anyone can verify.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            key={action.href}
-            href={action.href}
-            className="rounded-3xl border border-slate-200 bg-slate-950 px-5 py-4 text-sm font-medium text-white shadow-lg shadow-blue-900/10 transition hover:-translate-y-0.5 hover:bg-blue-700"
+            href="/notarize"
+            className="rounded-btn bg-action px-5 py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
           >
-            {action.label}
+            Notarize a document
           </Link>
-        ))}
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <div className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            How it works
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                title: "Hash locally",
-                body: "The original file never leaves the browser. zkNotary only works from the cryptographic hash."
-              },
-              {
-                title: "Sign intent",
-                body: "The user wallet signs a plain-English authorization message before the platform relays the record."
-              },
-              {
-                title: "Verify later",
-                body: "Anyone can inspect the attestation certificate, see the wallet, timestamp, and chain reference, and compare hashes."
-              }
-            ].map((step) => (
-              <article
-                key={step.title}
-                className="rounded-3xl border border-slate-200 bg-white p-5"
-              >
-                <h2 className="text-lg font-semibold text-slate-950">{step.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{step.body}</p>
-              </article>
-            ))}
-          </div>
+          <Link
+            href="/verify"
+            className="rounded-btn border border-ui-border px-5 py-2.5 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
+          >
+            Verify an attestation
+          </Link>
+          <Link
+            href="/dashboard"
+            className="rounded-btn border border-ui-border px-5 py-2.5 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
+          >
+            Open dashboard
+          </Link>
         </div>
-
-        <TrustBanner
-          title="Public beta on Sepolia"
-          body="This first release is designed as a trustworthy beta. It proves wallet-authorized attestation of a file hash on a test network, but it does not by itself prove authorship, truthfulness, or universal legal enforceability."
-        />
       </section>
-    </main>
+
+      {/* How it works strip */}
+      <section className="border-b border-ui-border py-10">
+        <div className="grid gap-8 md:grid-cols-3">
+          {steps.map((step) => (
+            <article key={step.num}>
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-tint">
+                {step.num}
+              </p>
+              <h2 className="mt-2 text-[1rem] font-bold tracking-[-0.015em] text-ink">
+                {step.title}
+              </h2>
+              <p className="mt-2 text-[0.875rem] leading-6 text-ink-secondary">
+                {step.body}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Trust note */}
+      <section className="pt-8">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          Important
+        </p>
+        <p className="mt-2 max-w-2xl text-[0.875rem] leading-6 text-muted">
+          zkNotary proves that a wallet authorized an attestation for a specific
+          file hash at a specific time on Ethereum Sepolia. It does not prove
+          authorship, truthfulness, or legal enforceability.
+        </p>
+      </section>
+    </PageShell>
   );
 }
