@@ -122,35 +122,36 @@ export function VerifyWorkbench() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
-      <form
-        onSubmit={handleLookup}
-        className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5"
-      >
+    <div className="space-y-8">
+      <form onSubmit={handleLookup} className="rounded-card border border-ui-border bg-base p-8 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
               Verify
             </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-950">
+            <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
               Check a specific attestation or compare a file hash.
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            <p className="mt-3 max-w-2xl text-[0.875rem] leading-6 text-ink-secondary">
               Public verification is intentionally proof-only. zkNotary does not
               reveal filenames, descriptions, tags, or private notes on this page.
             </p>
           </div>
-          <div className="rounded-full border border-slate-200 bg-white p-1">
-            {[
-              ["file", "Upload file"],
-              ["reference", "Paste ref or hash"]
-            ].map(([value, label]) => (
+          <div className="flex rounded-btn border border-ui-border bg-surface p-1">
+            {(
+              [
+                ["file", "Upload file"],
+                ["reference", "Paste ref or hash"],
+              ] as const
+            ).map(([value, label]) => (
               <button
                 key={value}
                 type="button"
-                onClick={() => setMode(value as "file" | "reference")}
-                className={`rounded-full px-4 py-2 text-sm font-medium ${
-                  mode === value ? "bg-slate-950 text-white" : "text-slate-600"
+                onClick={() => setMode(value)}
+                className={`rounded-btn px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] transition ${
+                  mode === value
+                    ? "bg-action text-white"
+                    : "text-ink-secondary hover:text-ink"
                 }`}
               >
                 {label}
@@ -161,49 +162,55 @@ export function VerifyWorkbench() {
 
         <div className="mt-8 space-y-6">
           {mode === "file" ? (
-            <label className="block rounded-3xl border border-dashed border-blue-300 bg-blue-50/50 p-6">
-              <span className="text-sm font-semibold text-slate-900">Upload a file to hash locally</span>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
+            <label className="block rounded-card border border-dashed border-tint bg-surface p-6">
+              <span className="text-[0.875rem] font-semibold text-ink">Upload a file to hash locally</span>
+              <p className="mt-2 text-[0.875rem] leading-6 text-ink-secondary">
                 The original file stays in your browser. zkNotary compares the
                 computed hash against stored attestation records.
               </p>
               <input
                 type="file"
-                className="mt-4 block w-full text-sm text-slate-700"
+                className="mt-4 block w-full text-[0.875rem] text-ink-secondary"
                 onChange={(event) => {
                   setSelectedFile(event.currentTarget.files?.[0] ?? null);
                   setLookupState({ status: "idle", data: null, error: null });
                 }}
               />
-              <div className="mt-4 h-3 rounded-full bg-white/70">
+              <div className="mt-4 h-2 rounded-full bg-ui-border">
                 <div
-                  className="h-3 rounded-full bg-blue-600 transition-all"
+                  className="h-2 rounded-full bg-action transition-all"
                   style={{ width: `${hashProgress}%` }}
                 />
               </div>
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 font-mono text-[0.75rem] text-accent">
                 {computedHash ?? "Choose a file to compute its hash."}
               </p>
-              {hashError ? <p className="mt-2 text-sm text-rose-700">{hashError}</p> : null}
+              {hashError ? (
+                <p className="mt-2 text-[0.875rem] text-ui-error">{hashError}</p>
+              ) : null}
             </label>
           ) : (
             <div className="grid gap-4">
-              <label className="block rounded-3xl border border-slate-200 bg-white px-5 py-4">
-                <span className="text-sm font-semibold text-slate-900">Attestation reference</span>
+              <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
+                <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                  Attestation reference
+                </span>
                 <input
                   value={referenceInput}
                   onChange={(event) => setReferenceInput(event.currentTarget.value)}
-                  className="mt-3 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+                  className="mt-3 w-full rounded-btn border border-ui-border bg-base px-4 py-3 font-mono text-[0.875rem] text-ink outline-none focus:border-action"
                   placeholder="eip155:11155111:0x...:4"
                 />
               </label>
 
-              <label className="block rounded-3xl border border-slate-200 bg-white px-5 py-4">
-                <span className="text-sm font-semibold text-slate-900">Document hash</span>
+              <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
+                <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                  Document hash
+                </span>
                 <input
                   value={hashInput}
                   onChange={(event) => setHashInput(event.currentTarget.value)}
-                  className="mt-3 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+                  className="mt-3 w-full rounded-btn border border-ui-border bg-base px-4 py-3 font-mono text-[0.875rem] text-ink outline-none focus:border-action"
                   placeholder="0x..."
                 />
               </label>
@@ -212,61 +219,48 @@ export function VerifyWorkbench() {
 
           <button
             type="submit"
-            className="inline-flex items-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
+            className="rounded-btn bg-action px-5 py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
           >
-            {lookupState.status === "loading" ? "Checking records..." : "Verify attestation"}
+            {lookupState.status === "loading" ? "Checking records…" : "Verify attestation"}
           </button>
 
           {lookupState.status === "error" ? (
-            <p className="text-sm text-rose-700">{lookupState.error}</p>
-          ) : null}
-
-          {lookupState.status === "ready" && lookupState.data.primaryRecord ? (
-            <VerificationCertificate
-              outcome={lookupState.data.outcome}
-              record={lookupState.data.primaryRecord}
-              relatedRecords={lookupState.data.relatedRecords}
-            />
-          ) : null}
-
-          {lookupState.status === "ready" && !lookupState.data.primaryRecord ? (
-            <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm leading-6 text-rose-800">
-              <p className="font-semibold">No record found</p>
-              <p className="mt-2">
-                zkNotary could not find an attestation for the supplied reference or file
-                hash.
-              </p>
-              <p className="mt-2">
-                Reviewers can retry with a direct attestation reference, or upload the
-                original file so the browser computes its hash locally.
-              </p>
-            </div>
+            <p className="text-[0.875rem] text-ui-error">{lookupState.error}</p>
           ) : null}
         </div>
       </form>
 
-      <div className="space-y-6">
-        <TrustBanner
-          title="What public verification proves"
-          body="zkNotary verifies that a wallet-authorized attestation for a specific file hash exists on Sepolia. It does not prove authorship, truthfulness, or legal status by itself."
+      {lookupState.status === "ready" && lookupState.data.primaryRecord ? (
+        <VerificationCertificate
+          outcome={lookupState.data.outcome}
+          record={lookupState.data.primaryRecord}
+          relatedRecords={lookupState.data.relatedRecords}
         />
+      ) : null}
 
-        <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Export guidance
+      {lookupState.status === "ready" && !lookupState.data.primaryRecord ? (
+        <div className="rounded-card border border-ui-border bg-base px-6 py-5 text-[0.875rem] leading-6">
+          <p className="font-semibold text-ink">No record found</p>
+          <p className="mt-2 text-ink-secondary">
+            zkNotary could not find an attestation for the supplied reference or file hash.
           </p>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Reviewers can save a print-friendly certificate as PDF from the proof card
-            after a result is found. The exported view contains attestation facts only.
+          <p className="mt-2 text-ink-secondary">
+            Retry with a direct attestation reference, or upload the original file so the
+            browser computes its hash locally.
           </p>
-        </section>
+        </div>
+      ) : null}
 
-        <VerificationExplainer
-          outcome={
-            lookupState.status === "ready" ? lookupState.data.outcome : "exact-attestation"
-          }
-        />
-      </div>
+      <TrustBanner
+        title="What public verification proves"
+        body="zkNotary verifies that a wallet-authorized attestation for a specific file hash exists on Sepolia. It does not prove authorship, truthfulness, or legal status by itself."
+      />
+
+      <VerificationExplainer
+        outcome={
+          lookupState.status === "ready" ? lookupState.data.outcome : "exact-attestation"
+        }
+      />
     </div>
   );
 }
