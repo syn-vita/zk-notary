@@ -62,7 +62,7 @@ export default function HomePage() {
         <div className="grid gap-8 md:grid-cols-3">
           {steps.map((step) => (
             <article key={step.num}>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-tint">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-action">
                 {step.num}
               </p>
               <h2 className="mt-2 text-[1rem] font-bold tracking-[-0.015em] text-ink">
