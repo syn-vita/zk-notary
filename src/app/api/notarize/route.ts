@@ -7,6 +7,7 @@ import type { AttestationRecord, NotarizeResponse } from "@/lib/domain";
 import {
   computeAuthorizationDigest,
   notarizeSubmissionSchema,
+  resolveAttestationChainId,
   verifyAuthorizationSignature
 } from "@/lib/notarize";
 import { getPrivyServerClient } from "@/lib/privy-server";
@@ -102,8 +103,13 @@ export async function POST(request: Request) {
       throw new Error("Could not resolve the notarization block.");
     }
 
+    const chainId = resolveAttestationChainId({
+      configuredChainId: publicEnv.NEXT_PUBLIC_CHAIN_ID,
+      blockChainId: block.chainId
+    });
+
     const attestationRef = createAttestationReference({
-      chainId: Number(block.chainId),
+      chainId,
       transactionHash: receipt.hash,
       logIndex: matchingLog.index
     });
@@ -114,7 +120,7 @@ export async function POST(request: Request) {
       documentHash: payload.documentHash,
       attestingWallet: claimedWallet,
       authorizationDigest: payload.authorizationDigest,
-      chainId: Number(block.chainId),
+      chainId,
       networkName: publicEnv.NEXT_PUBLIC_CHAIN_NAME,
       txHash: receipt.hash,
       logIndex: matchingLog.index,

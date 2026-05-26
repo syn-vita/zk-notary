@@ -83,3 +83,21 @@ export function verifyAuthorizationSignature(input: {
 export function computeAuthorizationDigest(authorizationMessage: string): string {
   return hashMessage(authorizationMessage);
 }
+
+export function resolveAttestationChainId(input: {
+  configuredChainId: number;
+  blockChainId: bigint | number | undefined;
+}): number {
+  const candidate =
+    input.blockChainId === undefined ? Number.NaN : Number(input.blockChainId);
+
+  if (Number.isInteger(candidate) && candidate > 0) {
+    return candidate;
+  }
+
+  if (Number.isInteger(input.configuredChainId) && input.configuredChainId > 0) {
+    return input.configuredChainId;
+  }
+
+  throw new Error("A positive chain ID is required.");
+}

@@ -3,6 +3,7 @@ import { Wallet } from "ethers";
 
 import {
   classifyDuplicateStatus,
+  resolveAttestationChainId,
   normalizeTags,
   verifyAuthorizationSignature
 } from "./notarize.ts";
@@ -60,5 +61,14 @@ describe("notarize helpers", () => {
         walletAddress: otherWallet.address
       })
     ).to.throw("Authorization signature does not match the selected wallet.");
+  });
+
+  it("falls back to the configured chain id when block chain id is missing", () => {
+    expect(
+      resolveAttestationChainId({
+        configuredChainId: 11155111,
+        blockChainId: undefined
+      })
+    ).to.equal(11155111);
   });
 });
