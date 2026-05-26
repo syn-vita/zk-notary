@@ -75,9 +75,12 @@ export function ReceiptCard({ record }: ReceiptCardProps) {
           href={`https://sepolia.etherscan.io/tx/${record.txHash}`}
           target="_blank"
           rel="noreferrer"
-          className="rounded-btn border border-ui-border px-4 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
+          className="inline-flex items-center gap-1.5 rounded-btn border border-ui-border px-4 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
         >
           View transaction
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </a>
       </div>
 
