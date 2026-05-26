@@ -2,6 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 
 import { publicEnv, serverEnv } from "@/lib/env";
 import type { AttestationRecord } from "@/lib/domain";
+import {
+  fromDatabaseAttestationRow,
+  type DatabaseAttestationRow
+} from "@/lib/records";
 
 export function getServiceSupabaseClient() {
   if (!publicEnv.NEXT_PUBLIC_SUPABASE_URL || !serverEnv.SUPABASE_SERVICE_ROLE_KEY) {
@@ -25,13 +29,13 @@ export async function getAttestationRecordByRef(attestationRef: string) {
     .from("attestations")
     .select("*")
     .eq("attestation_ref", attestationRef)
-    .maybeSingle<AttestationRecord>();
+    .maybeSingle<DatabaseAttestationRow>();
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return data ? fromDatabaseAttestationRow(data) : null;
 }
 
 export async function getAttestationRecordsByHash(documentHash: string) {
@@ -45,13 +49,13 @@ export async function getAttestationRecordsByHash(documentHash: string) {
     .select("*")
     .eq("document_hash", documentHash)
     .order("notarized_at", { ascending: true })
-    .returns<AttestationRecord[]>();
+    .returns<DatabaseAttestationRow[]>();
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return (data ?? []).map(fromDatabaseAttestationRow);
 }
 
 export async function getAttestationRecordsByUser(userId: string) {
@@ -65,13 +69,13 @@ export async function getAttestationRecordsByUser(userId: string) {
     .select("*")
     .eq("user_id", userId)
     .order("notarized_at", { ascending: false })
-    .returns<AttestationRecord[]>();
+    .returns<DatabaseAttestationRow[]>();
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return (data ?? []).map(fromDatabaseAttestationRow);
 }
 
 export async function supersedeAttestationRecord(input: {
@@ -96,11 +100,11 @@ export async function supersedeAttestationRecord(input: {
     .eq("id", input.id)
     .eq("user_id", input.userId)
     .select("*")
-    .maybeSingle<AttestationRecord>();
+    .maybeSingle<DatabaseAttestationRow>();
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return data ? fromDatabaseAttestationRow(data) : null;
 }
