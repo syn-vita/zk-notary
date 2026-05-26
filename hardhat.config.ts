@@ -1,5 +1,9 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { HardhatUserConfig } from "hardhat/config";
+import { config as loadEnv } from "dotenv";
+
+loadEnv({ path: ".env.local" });
+loadEnv();
 
 const sepoliaRpcUrl = process.env.SEPOLIA_RPC_URL;
 const deployerPrivateKey =
