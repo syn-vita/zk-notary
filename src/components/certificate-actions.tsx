@@ -35,6 +35,7 @@ function buildPrintDocument(record: PublicAttestationRecord, variant: "certifica
         h2 { margin: 0 0 20px; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: #1d4ed8; }
         p { line-height: 1.6; }
         dl { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+        @media print { dl { grid-template-columns: 1fr; } }
         .card { border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; background: #f8fafc; }
         dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #475569; }
         dd { margin: 8px 0 0; word-break: break-all; font-size: 14px; }
