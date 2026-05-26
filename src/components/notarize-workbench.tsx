@@ -69,19 +69,20 @@ function formatStatusLabel(input: {
 
 function ConfigNotice() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
-      <section className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
+    <div className="space-y-8">
+      <section className="rounded-card border border-ui-border bg-base p-8 shadow-card">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
           Notarize
         </p>
-        <h1 className="mt-3 text-3xl font-semibold text-slate-950">
+        <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
           Configure Privy before testing the notarize flow.
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-          The live notarization experience depends on `NEXT_PUBLIC_PRIVY_APP_ID`
-          and `NEXT_PUBLIC_PRIVY_CLIENT_ID`. Once those are set, this page will
-          enable wallet login, local hashing, signed authorization, and sponsored
-          relay submission.
+        <p className="mt-4 max-w-2xl text-[0.875rem] leading-7 text-ink-secondary">
+          The live notarization experience depends on{" "}
+          <code className="font-mono text-accent">NEXT_PUBLIC_PRIVY_APP_ID</code> and{" "}
+          <code className="font-mono text-accent">NEXT_PUBLIC_PRIVY_CLIENT_ID</code>. Once
+          those are set, this page will enable wallet login, local hashing, signed
+          authorization, and sponsored relay submission.
         </p>
       </section>
 
@@ -418,40 +419,40 @@ function NotarizeFlow() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.35fr_0.95fr]">
+    <div className="space-y-8">
       <form
         onSubmit={handleSubmit}
-        className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5"
+        className="rounded-card border border-ui-border bg-base p-8 shadow-card"
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
               Notarize
             </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-950">
+            <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
               Create a wallet-authorized evidence record.
             </h1>
           </div>
-          <div className="rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-            <p className="font-semibold text-slate-900">
+          <div className="rounded-card border border-ui-border bg-surface px-4 py-3">
+            <p className="text-[0.875rem] font-semibold text-ink">
               {preferredWallet?.address ?? "No wallet linked"}
             </p>
-            <p className="mt-1">
+            <p className="mt-1 text-[0.875rem] text-ink-secondary">
               {authenticated ? "Signed in with Privy" : "Sign in required before submission"}
             </p>
           </div>
         </div>
 
         <div className="mt-8 space-y-6">
-          <label className="block rounded-3xl border border-dashed border-blue-300 bg-blue-50/50 p-6">
-            <span className="text-sm font-semibold text-slate-900">Choose a document</span>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+          <label className="block rounded-card border border-dashed border-tint bg-surface p-6">
+            <span className="text-[0.875rem] font-semibold text-ink">Choose a document</span>
+            <p className="mt-2 text-[0.875rem] leading-6 text-ink-secondary">
               The original file stays in your browser. Only the hash and selected
               metadata are sent.
             </p>
             <input
               type="file"
-              className="mt-4 block w-full text-sm text-slate-700"
+              className="mt-4 block w-full text-[0.875rem] text-ink-secondary"
               onChange={(event) => {
                 setSubmitState("idle");
                 setSubmitError(null);
@@ -460,11 +461,11 @@ function NotarizeFlow() {
             />
           </label>
 
-          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4">
+          <div className="rounded-card border border-ui-border bg-surface px-5 py-4">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-slate-900">Hashing progress</p>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="text-[0.875rem] font-semibold text-ink">Hashing progress</p>
+                <p className="mt-1 text-[0.875rem] text-ink-secondary">
                   {formatStatusLabel({
                     hashState: hashState.status,
                     duplicateState: duplicateState.state,
@@ -472,61 +473,65 @@ function NotarizeFlow() {
                   })}
                 </p>
               </div>
-              <p className="text-sm font-semibold text-blue-700">{hashState.progress}%</p>
+              <p className="text-[0.875rem] font-bold text-action">{hashState.progress}%</p>
             </div>
-            <div className="mt-4 h-3 rounded-full bg-slate-100">
+            <div className="mt-4 h-2 rounded-full bg-ui-border">
               <div
-                className="h-3 rounded-full bg-blue-600 transition-all"
+                className="h-2 rounded-full bg-action transition-all"
                 style={{ width: `${hashState.progress}%` }}
               />
             </div>
             {hashState.status === "ready" ? (
-              <p className="mt-4 break-all text-sm text-slate-700">{hashState.hash}</p>
+              <p className="mt-4 break-all font-mono text-[0.75rem] text-accent">{hashState.hash}</p>
             ) : null}
             {hashState.status === "error" ? (
-              <p className="mt-4 text-sm text-rose-700">{hashState.error}</p>
+              <p className="mt-4 text-[0.875rem] text-ui-error">{hashState.error}</p>
             ) : null}
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block rounded-3xl border border-slate-200 bg-white px-5 py-4">
-              <span className="text-sm font-semibold text-slate-900">Description</span>
+            <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                Description
+              </span>
               <textarea
                 value={description}
                 onChange={(event) => setDescription(event.currentTarget.value)}
                 rows={4}
-                className="mt-3 w-full resize-none rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+                className="mt-3 w-full resize-none rounded-btn border border-ui-border bg-base px-4 py-3 text-[0.875rem] text-ink outline-none focus:border-action"
                 placeholder="Optional context for the receipt"
               />
             </label>
 
-            <label className="block rounded-3xl border border-slate-200 bg-white px-5 py-4">
-              <span className="text-sm font-semibold text-slate-900">Tags</span>
+            <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                Tags
+              </span>
               <input
                 value={tagInput}
                 onChange={(event) => setTagInput(event.currentTarget.value)}
-                className="mt-3 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+                className="mt-3 w-full rounded-btn border border-ui-border bg-base px-4 py-3 text-[0.875rem] text-ink outline-none focus:border-action"
                 placeholder="Legal, Academic, Personal"
               />
-              <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-500">
+              <p className="mt-3 text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
                 {normalizeTags(tagInput).join(" · ") || "No tags yet"}
               </p>
             </label>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4">
+          <div className="rounded-card border border-ui-border bg-surface px-5 py-4">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-[0.875rem] font-semibold text-ink">
                   Public display name
                 </p>
-                <p className="mt-1 text-sm leading-6 text-slate-600">
+                <p className="mt-1 text-[0.875rem] leading-6 text-ink-secondary">
                   Optionally attach your current private display name to this single
                   attestation. The name is copied as a public snapshot only for this
                   record and will not change if you edit your profile later.
                 </p>
               </div>
-              <label className="inline-flex items-center gap-3 text-sm font-medium text-slate-700">
+              <label className="inline-flex items-center gap-3 text-[0.875rem] font-medium text-ink">
                 <input
                   type="checkbox"
                   checked={shareDisplayNamePublicly}
@@ -535,12 +540,12 @@ function NotarizeFlow() {
                     shareDisplayNamePublicly: true
                   })}
                   onChange={(event) => setShareDisplayNamePublicly(event.currentTarget.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-ui-border accent-action"
                 />
                 Share name publicly
               </label>
             </div>
-            <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="mt-3 rounded-btn border border-ui-border bg-base px-4 py-3 text-[0.875rem] text-ink-secondary">
               {profileState.status === "loading"
                 ? "Loading your saved private display name..."
                 : profileState.profile?.displayName
@@ -548,27 +553,27 @@ function NotarizeFlow() {
                   : "No private display name is saved yet. Add one in your dashboard before opting in."}
             </div>
             {profileState.status === "error" ? (
-              <p className="mt-3 text-sm text-rose-700">{profileState.error}</p>
+              <p className="mt-3 text-[0.875rem] text-ui-error">{profileState.error}</p>
             ) : null}
             {!profileState.profile?.displayName ? (
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-[0.875rem] text-ink-secondary">
                 You can save a private display name from the dashboard and then choose
                 whether to expose it on future attestations.
               </p>
             ) : null}
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4">
-            <p className="text-sm font-semibold text-slate-900">Duplicate status</p>
+          <div className="rounded-card border border-ui-border bg-surface px-5 py-4">
+            <p className="text-[0.875rem] font-semibold text-ink">Duplicate status</p>
             {duplicateState.state === "ready" ? (
-              <div className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+              <div className="mt-3 space-y-2 text-[0.875rem] leading-6 text-ink-secondary">
                 <p>{duplicateMessages[duplicateState.result.status]}</p>
                 <p>Existing attestations: {duplicateState.result.attestationCount}</p>
               </div>
             ) : duplicateState.state === "error" ? (
-              <p className="mt-3 text-sm text-rose-700">{duplicateState.error}</p>
+              <p className="mt-3 text-[0.875rem] text-ui-error">{duplicateState.error}</p>
             ) : (
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-[0.875rem] text-ink-secondary">
                 {hashState.status === "ready"
                   ? "Checking the registry..."
                   : "Hash a file to check existing attestations."}
@@ -584,41 +589,41 @@ function NotarizeFlow() {
               hashState.status !== "ready" ||
               !walletsReady
             }
-            className="inline-flex items-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-400"
+            className="rounded-btn bg-action px-5 py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {authenticated ? "Authorize and notarize" : "Sign in to notarize"}
           </button>
 
-          {submitError ? <p className="text-sm text-rose-700">{submitError}</p> : null}
+          {submitError ? (
+            <p className="text-[0.875rem] text-ui-error">{submitError}</p>
+          ) : null}
         </div>
       </form>
 
-      <div className="space-y-6">
-        <TrustBanner
-          title="What this proof means"
-          body="zkNotary proves that a wallet authorized an attestation for this exact file hash at a specific time on Sepolia. It does not, by itself, prove authorship or legal validity."
-        />
+      <TrustBanner
+        title="What this proof means"
+        body="zkNotary proves that a wallet authorized an attestation for this exact file hash at a specific time on Sepolia. It does not, by itself, prove authorship or legal validity."
+      />
 
-        <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Next surface
-          </p>
-          <h2 className="mt-3 text-xl font-semibold text-slate-950">
-            Receipt and verification links
-          </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Once the attestation is submitted, zkNotary redirects to a receipt page
-            that records the wallet, timestamp, transaction, and public verification
-            reference. The receipt also supports a print-friendly proof-only PDF export.
-          </p>
-          <Link
-            href="/verify"
-            className="mt-5 inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700"
-          >
-            Open verify page shell
-          </Link>
-        </section>
-      </div>
+      <section className="rounded-card border border-ui-border bg-base p-6 shadow-card">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          Next surface
+        </p>
+        <h2 className="mt-2 text-[1.125rem] font-bold tracking-[-0.015em] text-ink">
+          Receipt and verification links
+        </h2>
+        <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
+          Once the attestation is submitted, zkNotary redirects to a receipt page
+          that records the wallet, timestamp, transaction, and public verification
+          reference. The receipt also supports a print-friendly proof-only PDF export.
+        </p>
+        <Link
+          href="/verify"
+          className="mt-5 inline-flex rounded-btn border border-ui-border px-4 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
+        >
+          Open verify page
+        </Link>
+      </section>
     </div>
   );
 }
