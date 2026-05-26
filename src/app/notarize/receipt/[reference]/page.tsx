@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PageNav } from "@/components/page-nav";
 import { ReceiptCard } from "@/components/receipt-card";
 import { TrustBanner } from "@/components/trust-banner";
 import { toPublicAttestationView } from "@/lib/records";
@@ -20,6 +21,7 @@ export default async function ReceiptPage({ params }: ReceiptPageProps) {
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-6 py-10 lg:px-10">
+      <PageNav backLabel="Back" homeLabel="Main page" />
       <div className="grid gap-8 lg:grid-cols-[1.35fr_0.95fr]">
         {record ? (
           <ReceiptCard record={toPublicAttestationView(record)} />
