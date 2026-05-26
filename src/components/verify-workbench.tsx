@@ -72,15 +72,13 @@ export function VerifyWorkbench() {
     };
   }, [selectedFile]);
 
-  async function handleLookup(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async function runLookup(ref: string, hash: string, currentMode: "file" | "reference", currentComputedHash: string | null) {
     const query = new URLSearchParams();
-    if (referenceInput.trim()) {
-      query.set("ref", referenceInput.trim());
+    if (ref.trim()) {
+      query.set("ref", ref.trim());
     }
 
-    const candidateHash = mode === "file" ? computedHash : hashInput.trim();
+    const candidateHash = currentMode === "file" ? currentComputedHash : hash.trim();
     if (candidateHash) {
       query.set("hash", candidateHash);
     }
@@ -94,11 +92,7 @@ export function VerifyWorkbench() {
       return;
     }
 
-    setLookupState({
-      status: "loading",
-      data: null,
-      error: null
-    });
+    setLookupState({ status: "loading", data: null, error: null });
 
     try {
       const response = await fetch(`/api/verify?${query.toString()}`);
@@ -106,12 +100,7 @@ export function VerifyWorkbench() {
       if (!response.ok || "error" in payload) {
         throw new Error("error" in payload ? payload.error : "Verification failed.");
       }
-
-      setLookupState({
-        status: "ready",
-        data: payload,
-        error: null
-      });
+      setLookupState({ status: "ready", data: payload, error: null });
     } catch (error: unknown) {
       setLookupState({
         status: "error",
@@ -120,6 +109,18 @@ export function VerifyWorkbench() {
       });
     }
   }
+
+  async function handleLookup(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await runLookup(referenceInput, hashInput, mode, computedHash);
+  }
+
+  useEffect(() => {
+    if (initialRef || initialHash) {
+      void runLookup(initialRef, initialHash, "reference", null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-8">
