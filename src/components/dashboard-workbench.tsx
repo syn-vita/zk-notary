@@ -512,9 +512,15 @@ export function DashboardWorkbench() {
         </div>
       ) : null}
 
-      {state.status !== "loading" && filteredRecords.length === 0 ? (
+      {state.status === "ready" && state.records.length === 0 ? (
         <div className="rounded-card border border-ui-border bg-surface px-5 py-4 text-[0.875rem] text-ink-secondary">
-          No matching attestations found.
+          No attestations yet. Once you notarize a document, it will appear here.
+        </div>
+      ) : null}
+
+      {state.status === "ready" && state.records.length > 0 && filteredRecords.length === 0 ? (
+        <div className="rounded-card border border-ui-border bg-surface px-5 py-4 text-[0.875rem] text-ink-secondary">
+          No records match your search or filter. Try clearing the query.
         </div>
       ) : null}
 
