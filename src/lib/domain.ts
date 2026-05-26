@@ -1,5 +1,12 @@
 export type AttestationRecordStatus = "active" | "superseded";
 
+export type UserProfile = {
+  userId: string;
+  displayName: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type AttestationRecord = {
   id: string;
   userId: string;
@@ -69,4 +76,8 @@ export type VerificationLookupResponse = {
 
 export type DashboardListResponse = {
   records: AttestationRecord[];
+};
+
+export type UserProfileResponse = {
+  profile: UserProfile | null;
 };

@@ -1,7 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
 import { publicEnv, serverEnv } from "@/lib/env";
-import type { AttestationRecord } from "@/lib/domain";
+import type { AttestationRecord, UserProfile } from "@/lib/domain";
+import {
+  fromDatabaseProfileRow,
+  type DatabaseProfileRow
+} from "@/lib/profile";
 import {
   fromDatabaseAttestationRow,
   type DatabaseAttestationRow
@@ -107,4 +111,55 @@ export async function supersedeAttestationRecord(input: {
   }
 
   return data ? fromDatabaseAttestationRow(data) : null;
+}
+
+export async function getProfileByUserId(userId: string): Promise<UserProfile | null> {
+  const supabase = getServiceSupabaseClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle<DatabaseProfileRow>();
+
+  if (error) {
+    throw error;
+  }
+
+  return data ? fromDatabaseProfileRow(data) : null;
+}
+
+export async function upsertProfile(input: {
+  userId: string;
+  displayName: string;
+}): Promise<UserProfile | null> {
+  const supabase = getServiceSupabaseClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const timestamp = new Date().toISOString();
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert(
+      {
+        user_id: input.userId,
+        display_name: input.displayName,
+        updated_at: timestamp
+      },
+      {
+        onConflict: "user_id"
+      }
+    )
+    .select("*")
+    .maybeSingle<DatabaseProfileRow>();
+
+  if (error) {
+    throw error;
+  }
+
+  return data ? fromDatabaseProfileRow(data) : null;
 }

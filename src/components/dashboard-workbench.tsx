@@ -2,15 +2,127 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
+import { useWallets } from "@privy-io/react-auth";
 
 import { TrustBanner } from "@/components/trust-banner";
-import type { AttestationRecord, DashboardListResponse } from "@/lib/domain";
+import type {
+  AttestationRecord,
+  DashboardListResponse,
+  UserProfile,
+  UserProfileResponse
+} from "@/lib/domain";
+import { resolveOwnerDisplayName } from "@/lib/profile";
 import { filterOwnerAttestations } from "@/lib/records";
 
 type DashboardState =
   | { status: "idle" | "loading"; records: AttestationRecord[]; error: null }
   | { status: "ready"; records: AttestationRecord[]; error: null }
   | { status: "error"; records: AttestationRecord[]; error: string };
+
+type ProfileState =
+  | { status: "idle" | "loading"; profile: UserProfile | null; error: null }
+  | { status: "ready"; profile: UserProfile | null; error: null }
+  | { status: "error"; profile: UserProfile | null; error: string };
+
+function ProfileSettingsCard({
+  profile,
+  walletAddress,
+  onSaved
+}: {
+  profile: UserProfile | null;
+  walletAddress: string | null;
+  onSaved: (profile: UserProfile) => void;
+}) {
+  const { getAccessToken } = usePrivy();
+  const [displayName, setDisplayName] = useState(profile?.displayName ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fallbackLabel = walletAddress ?? "your linked wallet";
+
+  useEffect(() => {
+    setDisplayName(profile?.displayName ?? "");
+  }, [profile?.displayName]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    try {
+      setSaving(true);
+      setError(null);
+
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        throw new Error("Missing Privy access token.");
+      }
+
+      const response = await fetch("/api/dashboard/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          displayName: displayName.trim()
+        })
+      });
+
+      const payload = (await response.json()) as {
+        profile?: UserProfile | null;
+        error?: string;
+      };
+
+      if (!response.ok || !payload.profile) {
+        throw new Error(payload.error ?? "Could not save profile.");
+      }
+
+      onSaved(payload.profile);
+    } catch (reason: unknown) {
+      setError(reason instanceof Error ? reason.message : "Could not save profile.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+        Account settings
+      </p>
+      <h2 className="mt-3 text-xl font-semibold text-slate-950">Display name</h2>
+      <p className="mt-3 text-sm leading-6 text-slate-600">
+        This label is shown only in your private owner-facing dashboard. Public
+        verification continues to use wallet addresses only.
+      </p>
+      <p className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+        {profile?.displayName
+          ? `Current private name: ${profile.displayName}`
+          : `No private name saved yet. Your dashboard will fall back to ${fallbackLabel}.`}
+      </p>
+      <form onSubmit={handleSubmit} className="mt-5 space-y-3">
+        <label className="block">
+          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+            Display name
+          </span>
+          <input
+            value={displayName}
+            onChange={(event) => setDisplayName(event.currentTarget.value)}
+            maxLength={80}
+            className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+            placeholder="Giancarlo"
+          />
+        </label>
+        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        <button
+          type="submit"
+          disabled={saving || !displayName.trim()}
+          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white disabled:bg-slate-400"
+        >
+          {saving ? "Saving..." : profile ? "Update display name" : "Save display name"}
+        </button>
+      </form>
+    </section>
+  );
+}
 
 function SupersedeForm({
   record,
@@ -188,13 +300,22 @@ function DashboardFallback({ message }: { message: string }) {
 
 export function DashboardWorkbench() {
   const { ready, authenticated, login, getAccessToken } = usePrivy();
+  const { wallets } = useWallets();
   const [state, setState] = useState<DashboardState>({
     status: "idle",
     records: [],
     error: null
   });
+  const [profileState, setProfileState] = useState<ProfileState>({
+    status: "idle",
+    profile: null,
+    error: null
+  });
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "superseded">("all");
+  const preferredWallet =
+    wallets.find((wallet) => wallet.type === "ethereum" && wallet.linked) ??
+    wallets.find((wallet) => wallet.type === "ethereum");
 
   useEffect(() => {
     if (!ready || !authenticated) {
@@ -207,6 +328,11 @@ export function DashboardWorkbench() {
       status: "loading",
       error: null
     }));
+    setProfileState((current) => ({
+      ...current,
+      status: "loading",
+      error: null
+    }));
 
     void getAccessToken()
       .then((token) => {
@@ -214,16 +340,32 @@ export function DashboardWorkbench() {
           throw new Error("Missing Privy access token.");
         }
 
-        return fetch("/api/dashboard/attestations", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const headers = {
+          Authorization: `Bearer ${token}`
+        };
+
+        return Promise.all([
+          fetch("/api/dashboard/attestations", { headers }),
+          fetch("/api/dashboard/profile", { headers })
+        ]);
       })
-      .then(async (response) => {
-        const payload = (await response.json()) as DashboardListResponse | { error: string };
-        if (!response.ok || "error" in payload) {
-          throw new Error("error" in payload ? payload.error : "Could not load dashboard.");
+      .then(async ([recordsResponse, profileResponse]) => {
+        const recordsPayload = (await recordsResponse.json()) as
+          | DashboardListResponse
+          | { error: string };
+        if (!recordsResponse.ok || "error" in recordsPayload) {
+          throw new Error(
+            "error" in recordsPayload ? recordsPayload.error : "Could not load dashboard."
+          );
+        }
+
+        const profilePayload = (await profileResponse.json()) as
+          | UserProfileResponse
+          | { error: string };
+        if (!profileResponse.ok || "error" in profilePayload) {
+          throw new Error(
+            "error" in profilePayload ? profilePayload.error : "Could not load profile."
+          );
         }
 
         if (!active) {
@@ -232,7 +374,12 @@ export function DashboardWorkbench() {
 
         setState({
           status: "ready",
-          records: payload.records,
+          records: recordsPayload.records,
+          error: null
+        });
+        setProfileState({
+          status: "ready",
+          profile: profilePayload.profile,
           error: null
         });
       })
@@ -246,6 +393,11 @@ export function DashboardWorkbench() {
           records: [],
           error: error instanceof Error ? error.message : "Could not load dashboard."
         });
+        setProfileState({
+          status: "error",
+          profile: null,
+          error: error instanceof Error ? error.message : "Could not load profile."
+        });
       });
 
     return () => {
@@ -257,6 +409,10 @@ export function DashboardWorkbench() {
     () => filterOwnerAttestations(state.records, { query, status: statusFilter }),
     [query, state.records, statusFilter]
   );
+  const ownerLabel = resolveOwnerDisplayName({
+    profile: profileState.profile,
+    walletAddress: preferredWallet?.address ?? null
+  });
 
   if (!ready) {
     return <DashboardFallback message="Loading your private archive..." />;
@@ -300,8 +456,12 @@ export function DashboardWorkbench() {
             Dashboard
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-slate-950">
-            Private evidence archive for your attestations.
+            Private evidence archive for {ownerLabel}.
           </h1>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Your private display name stays inside authenticated owner views and never
+            appears on public proof pages.
+          </p>
           <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
             <input
               value={query}
@@ -358,10 +518,26 @@ export function DashboardWorkbench() {
       </section>
 
       <div className="space-y-6">
+        <ProfileSettingsCard
+          profile={profileState.profile}
+          walletAddress={preferredWallet?.address ?? null}
+          onSaved={(profile) => {
+            setProfileState({
+              status: "ready",
+              profile,
+              error: null
+            });
+          }}
+        />
         <TrustBanner
           title="Proof-only public pages"
           body="Public verification and receipt pages intentionally hide filename, description, tags, and private notes. Only the owner dashboard reveals that metadata."
         />
+        {profileState.status === "error" ? (
+          <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-800">
+            {profileState.error}
+          </div>
+        ) : null}
         <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
             Supersession guidance
