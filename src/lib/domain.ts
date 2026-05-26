@@ -27,3 +27,19 @@ export type VerificationOutcome =
   | "hash-with-other-attestations"
   | "not-found"
   | "superseded-valid";
+
+export type DuplicateCheckResponse = {
+  status: "not-found" | "already-by-you" | "already-by-others" | "unavailable";
+  attestationCount: number;
+  hasWalletAttested: boolean;
+  message: string;
+};
+
+export type NotarizeResponse = {
+  attestationRef: string;
+  receiptPath: string;
+  txHash: string;
+  notarizedAt: string;
+  walletAddress: string;
+  documentHash: string;
+};

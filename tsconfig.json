@@ -24,7 +24,8 @@
       ]
     },
     "types": [
-      "node"
+      "node",
+      "mocha"
     ],
     "plugins": [
       {
