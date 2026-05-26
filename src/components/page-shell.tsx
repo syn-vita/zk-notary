@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { StepIndicator } from "@/components/step-indicator";
@@ -22,6 +22,7 @@ export function PageShell({
   currentStep,
 }: PageShellProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   function handleBack() {
     if (typeof window !== "undefined" && window.history.length > 1) {
@@ -60,19 +61,19 @@ export function PageShell({
         <nav className="ml-auto flex items-center gap-5">
           <Link
             href="/verify"
-            className="text-[0.8125rem] text-ink-secondary transition hover:text-ink"
+            className={`text-[0.8125rem] transition ${pathname === "/verify" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
           >
             Verify
           </Link>
           <Link
             href="/dashboard"
-            className="text-[0.8125rem] text-ink-secondary transition hover:text-ink"
+            className={`text-[0.8125rem] transition ${pathname === "/dashboard" ? "font-semibold text-ink" : "text-ink-secondary hover:text-ink"}`}
           >
             Dashboard
           </Link>
           <Link
             href="/notarize"
-            className="rounded-btn bg-action px-3 py-1.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
+            className={`rounded-btn px-3 py-1.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] transition ${pathname === "/notarize" ? "bg-action/80 text-white" : "bg-action text-white hover:bg-action/90"}`}
           >
             Notarize
           </Link>
