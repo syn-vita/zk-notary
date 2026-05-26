@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ReceiptCard } from "@/components/receipt-card";
 import { TrustBanner } from "@/components/trust-banner";
+import { toPublicAttestationView } from "@/lib/records";
 import { getAttestationRecordByRef } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +22,7 @@ export default async function ReceiptPage({ params }: ReceiptPageProps) {
     <main className="mx-auto min-h-screen max-w-6xl px-6 py-10 lg:px-10">
       <div className="grid gap-8 lg:grid-cols-[1.35fr_0.95fr]">
         {record ? (
-          <ReceiptCard record={record} />
+          <ReceiptCard record={toPublicAttestationView(record)} />
         ) : (
           <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-8 shadow-xl shadow-blue-950/5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import type { VerificationLookupResponse } from "@/lib/domain";
+import { toPublicAttestationView } from "@/lib/records";
 import {
   getAttestationRecordByRef,
   getAttestationRecordsByHash
@@ -52,7 +53,11 @@ export async function GET(request: Request) {
   });
 
   const payload: VerificationLookupResponse = {
-    ...resolved,
+    outcome: resolved.outcome,
+    primaryRecord: resolved.primaryRecord
+      ? toPublicAttestationView(resolved.primaryRecord)
+      : null,
+    relatedRecords: resolved.relatedRecords.map(toPublicAttestationView),
     query: {
       attestationRef: query.ref ?? null,
       documentHash: query.hash ?? resolved.primaryRecord?.documentHash ?? null

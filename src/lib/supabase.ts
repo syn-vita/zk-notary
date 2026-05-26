@@ -53,3 +53,54 @@ export async function getAttestationRecordsByHash(documentHash: string) {
 
   return data;
 }
+
+export async function getAttestationRecordsByUser(userId: string) {
+  const supabase = getServiceSupabaseClient();
+  if (!supabase) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("attestations")
+    .select("*")
+    .eq("user_id", userId)
+    .order("notarized_at", { ascending: false })
+    .returns<AttestationRecord[]>();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function supersedeAttestationRecord(input: {
+  id: string;
+  userId: string;
+  publicSupersededNote: string | null;
+  privateSupersededNote: string | null;
+}) {
+  const supabase = getServiceSupabaseClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("attestations")
+    .update({
+      status: "superseded",
+      public_superseded_note: input.publicSupersededNote,
+      private_superseded_note: input.privateSupersededNote,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", input.id)
+    .eq("user_id", input.userId)
+    .select("*")
+    .maybeSingle<AttestationRecord>();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}

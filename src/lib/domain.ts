@@ -22,6 +22,19 @@ export type AttestationRecord = {
   createdAt: string;
 };
 
+export type PublicAttestationRecord = {
+  attestationRef: string;
+  documentHash: string;
+  attestingWallet: string;
+  chainId: number;
+  networkName: string;
+  txHash: string;
+  logIndex: number;
+  status: AttestationRecordStatus;
+  publicSupersededNote: string | null;
+  notarizedAt: string;
+};
+
 export type VerificationOutcome =
   | "exact-attestation"
   | "hash-with-other-attestations"
@@ -46,10 +59,14 @@ export type NotarizeResponse = {
 
 export type VerificationLookupResponse = {
   outcome: VerificationOutcome;
-  primaryRecord: AttestationRecord | null;
-  relatedRecords: AttestationRecord[];
+  primaryRecord: PublicAttestationRecord | null;
+  relatedRecords: PublicAttestationRecord[];
   query: {
     attestationRef: string | null;
     documentHash: string | null;
   };
+};
+
+export type DashboardListResponse = {
+  records: AttestationRecord[];
 };

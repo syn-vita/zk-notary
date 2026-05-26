@@ -64,7 +64,6 @@ export function resolveVerificationOutcome(input: {
 export function buildVerificationSummary(record: AttestationRecord): string {
   const baseSummary = [
     "Wallet-authorized proof recorded on Sepolia.",
-    `File name: ${record.fileName}.`,
     `Wallet: ${record.attestingWallet}.`,
     `Timestamp: ${new Date(record.notarizedAt).toLocaleString()}.`
   ];

@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import type { AttestationRecord } from "@/lib/domain";
+import type { PublicAttestationRecord } from "@/lib/domain";
 
 type ReceiptCardProps = {
-  record: AttestationRecord;
+  record: PublicAttestationRecord;
 };
 
 export function ReceiptCard({ record }: ReceiptCardProps) {
@@ -16,10 +16,13 @@ export function ReceiptCard({ record }: ReceiptCardProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
             Attestation receipt
           </p>
-          <h1 className="mt-2 text-3xl font-semibold text-slate-950">{record.fileName}</h1>
+          <h1 className="mt-2 text-3xl font-semibold text-slate-950">
+            Proof-only attestation receipt
+          </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
             This receipt confirms that zkNotary recorded a wallet-authorized
-            attestation for the file hash below on Ethereum Sepolia.
+            attestation for the file hash below on Ethereum Sepolia. Private file
+            metadata remains visible only in owner-only views.
           </p>
         </div>
 
@@ -41,9 +44,7 @@ export function ReceiptCard({ record }: ReceiptCardProps) {
           ["Transaction", record.txHash],
           ["Network", `${record.networkName} (${record.chainId})`],
           ["Document hash", record.documentHash],
-          ["Recorded at", new Date(record.notarizedAt).toLocaleString()],
-          ["Description", record.description ?? "None"],
-          ["Tags", record.tags.length ? record.tags.join(", ") : "None"]
+          ["Recorded at", new Date(record.notarizedAt).toLocaleString()]
         ].map(([label, value]) => (
           <div
             key={label}

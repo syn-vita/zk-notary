@@ -1,10 +1,10 @@
-import type { AttestationRecord, VerificationOutcome } from "@/lib/domain";
+import type { PublicAttestationRecord, VerificationOutcome } from "@/lib/domain";
 import { buildVerificationSummary } from "@/lib/verify";
 
 type VerificationCertificateProps = {
   outcome: VerificationOutcome;
-  record: AttestationRecord;
-  relatedRecords: AttestationRecord[];
+  record: PublicAttestationRecord;
+  relatedRecords: PublicAttestationRecord[];
 };
 
 function outcomeLabel(outcome: VerificationOutcome) {
@@ -38,6 +38,18 @@ export function VerificationCertificate({
   relatedRecords
 }: VerificationCertificateProps) {
   const label = outcomeLabel(outcome);
+  const summaryRecord = {
+    ...record,
+    id: "",
+    userId: "",
+    authorizationDigest: "",
+    fileName: "",
+    fileType: null,
+    description: null,
+    tags: [],
+    privateSupersededNote: null,
+    createdAt: record.notarizedAt
+  };
 
   return (
     <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-8 shadow-xl shadow-blue-950/5">
@@ -46,9 +58,11 @@ export function VerificationCertificate({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
             Public certificate
           </p>
-          <h2 className="mt-2 text-3xl font-semibold text-slate-950">{record.fileName}</h2>
+          <h2 className="mt-2 text-3xl font-semibold text-slate-950">
+            Proof of attestation
+          </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-            {buildVerificationSummary(record)}
+            {buildVerificationSummary(summaryRecord)}
           </p>
         </div>
 
@@ -64,9 +78,7 @@ export function VerificationCertificate({
           ["Wallet", record.attestingWallet],
           ["Recorded at", new Date(record.notarizedAt).toLocaleString()],
           ["Network", `${record.networkName} (${record.chainId})`],
-          ["Transaction", record.txHash],
-          ["Filename", record.fileName],
-          ["Description", record.description ?? "Not shared"]
+          ["Transaction", record.txHash]
         ].map(([labelText, value]) => (
           <div
             key={labelText}
