@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "test": "npm.cmd run test:unit && npm.cmd run test:contracts",
     "test:unit": "mocha --require ts-node/register --extension ts \"src/**/*.test.ts\"",
     "test:contracts": "hardhat test"
