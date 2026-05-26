@@ -484,7 +484,7 @@ function NotarizeFlow() {
           <p className="mt-3 text-sm leading-6 text-slate-600">
             Once the attestation is submitted, zkNotary redirects to a receipt page
             that records the wallet, timestamp, transaction, and public verification
-            reference.
+            reference. The receipt also supports a print-friendly proof-only PDF export.
           </p>
           <Link
             href="/verify"

@@ -1,3 +1,4 @@
+import { CertificateActions } from "@/components/certificate-actions";
 import Link from "next/link";
 
 import type { PublicAttestationRecord } from "@/lib/domain";
@@ -81,6 +82,8 @@ export function ReceiptCard({ record }: ReceiptCardProps) {
           View transaction
         </a>
       </div>
+
+      <CertificateActions record={record} variant="receipt" />
     </section>
   );
 }

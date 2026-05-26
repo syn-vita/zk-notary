@@ -1,3 +1,4 @@
+import { CertificateActions } from "@/components/certificate-actions";
 import type { PublicAttestationRecord, VerificationOutcome } from "@/lib/domain";
 import { buildVerificationSummary } from "@/lib/verify";
 
@@ -117,6 +118,8 @@ export function VerificationCertificate({
           </ul>
         </div>
       ) : null}
+
+      <CertificateActions record={record} variant="certificate" />
     </section>
   );
 }

@@ -135,6 +135,10 @@ export function VerifyWorkbench() {
             <h1 className="mt-3 text-3xl font-semibold text-slate-950">
               Check a specific attestation or compare a file hash.
             </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+              Public verification is intentionally proof-only. zkNotary does not
+              reveal filenames, descriptions, tags, or private notes on this page.
+            </p>
           </div>
           <div className="rounded-full border border-slate-200 bg-white p-1">
             {[
@@ -232,6 +236,10 @@ export function VerifyWorkbench() {
                 zkNotary could not find an attestation for the supplied reference or file
                 hash.
               </p>
+              <p className="mt-2">
+                Reviewers can retry with a direct attestation reference, or upload the
+                original file so the browser computes its hash locally.
+              </p>
             </div>
           ) : null}
         </div>
@@ -242,6 +250,16 @@ export function VerifyWorkbench() {
           title="What public verification proves"
           body="zkNotary verifies that a wallet-authorized attestation for a specific file hash exists on Sepolia. It does not prove authorship, truthfulness, or legal status by itself."
         />
+
+        <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Export guidance
+          </p>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Reviewers can save a print-friendly certificate as PDF from the proof card
+            after a result is found. The exported view contains attestation facts only.
+          </p>
+        </section>
 
         <VerificationExplainer
           outcome={
