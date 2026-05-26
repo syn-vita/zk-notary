@@ -475,9 +475,16 @@ function NotarizeFlow() {
               </div>
               <p className="text-[0.875rem] font-bold text-action">{hashState.progress}%</p>
             </div>
-            <div className="mt-4 h-2 rounded-full bg-ui-border">
+            <p className="mt-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+              {hashState.status === "ready"
+                ? "Done"
+                : hashState.status === "hashing"
+                  ? `Computing… ${hashState.progress}%`
+                  : "Waiting for file"}
+            </p>
+            <div className="mt-2 h-2 rounded-full bg-ui-border">
               <div
-                className="h-2 rounded-full bg-action transition-all"
+                className={`h-2 rounded-full transition-all ${hashState.status === "ready" ? "bg-success" : "bg-action"}`}
                 style={{ width: `${hashState.progress}%` }}
               />
             </div>

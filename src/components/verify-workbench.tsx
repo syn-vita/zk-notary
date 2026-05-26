@@ -176,9 +176,14 @@ export function VerifyWorkbench() {
                   setLookupState({ status: "idle", data: null, error: null });
                 }}
               />
-              <div className="mt-4 h-2 rounded-full bg-ui-border">
+              {selectedFile ? (
+                <p className="mt-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                  {computedHash ? "Done" : `Computing… ${hashProgress}%`}
+                </p>
+              ) : null}
+              <div className="mt-2 h-2 rounded-full bg-ui-border">
                 <div
-                  className="h-2 rounded-full bg-action transition-all"
+                  className={`h-2 rounded-full transition-all ${computedHash ? "bg-success" : "bg-action"}`}
                   style={{ width: `${hashProgress}%` }}
                 />
               </div>
