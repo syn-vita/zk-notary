@@ -1,4 +1,6 @@
-import { ethers, network } from "hardhat";
+import hardhat from "hardhat";
+
+const { ethers, network } = hardhat;
 
 async function main() {
   if (network.name !== "sepolia") {

@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -44,6 +45,7 @@
     "node_modules",
     "test",
     "**/*.test.ts",
-    "hardhat.config.ts"
+    "hardhat.config.ts",
+    "scripts"
   ]
 }
