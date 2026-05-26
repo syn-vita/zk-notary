@@ -43,3 +43,13 @@ export type NotarizeResponse = {
   walletAddress: string;
   documentHash: string;
 };
+
+export type VerificationLookupResponse = {
+  outcome: VerificationOutcome;
+  primaryRecord: AttestationRecord | null;
+  relatedRecords: AttestationRecord[];
+  query: {
+    attestationRef: string | null;
+    documentHash: string | null;
+  };
+};

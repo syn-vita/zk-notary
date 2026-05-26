@@ -33,3 +33,23 @@ export async function getAttestationRecordByRef(attestationRef: string) {
 
   return data;
 }
+
+export async function getAttestationRecordsByHash(documentHash: string) {
+  const supabase = getServiceSupabaseClient();
+  if (!supabase) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("attestations")
+    .select("*")
+    .eq("document_hash", documentHash)
+    .order("notarized_at", { ascending: true })
+    .returns<AttestationRecord[]>();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
