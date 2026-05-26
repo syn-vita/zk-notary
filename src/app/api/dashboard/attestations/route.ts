@@ -4,6 +4,8 @@ import type { DashboardListResponse } from "@/lib/domain";
 import { getPrivyServerClient } from "@/lib/privy-server";
 import { getAttestationRecordsByUser } from "@/lib/supabase";
 
+export const runtime = "nodejs";
+
 export async function GET(request: Request) {
   const authHeader = request.headers.get("authorization");
   const authToken = authHeader?.replace(/^Bearer\s+/i, "");

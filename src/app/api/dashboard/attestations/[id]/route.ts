@@ -4,6 +4,8 @@ import { z } from "zod";
 import { getPrivyServerClient } from "@/lib/privy-server";
 import { supersedeAttestationRecord } from "@/lib/supabase";
 
+export const runtime = "nodejs";
+
 const supersedeSchema = z.object({
   publicSupersededNote: z.string().trim().max(280).nullable(),
   privateSupersededNote: z.string().trim().max(500).nullable()

@@ -14,6 +14,9 @@ import { getPrivyServerClient } from "@/lib/privy-server";
 import { getServiceSupabaseClient, requireProfileDisplayName } from "@/lib/supabase";
 import { getReadContract, getWriteContract, zkNotaryAbi } from "@/lib/zknotary-contract";
 
+export const runtime = "nodejs";
+export const maxDuration = 300;
+
 export async function POST(request: Request) {
   const authHeader = request.headers.get("authorization");
   const authToken = authHeader?.replace(/^Bearer\s+/i, "");

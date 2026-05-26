@@ -5,6 +5,8 @@ import type { UserProfileResponse } from "@/lib/domain";
 import { getPrivyServerClient } from "@/lib/privy-server";
 import { getProfileByUserId, upsertProfile } from "@/lib/supabase";
 
+export const runtime = "nodejs";
+
 const profileSchema = z.object({
   displayName: z.string().trim().min(1).max(80)
 });

@@ -9,6 +9,8 @@ import {
 } from "@/lib/supabase";
 import { resolveVerificationOutcome } from "@/lib/verify";
 
+export const runtime = "nodejs";
+
 const querySchema = z.object({
   ref: z
     .string()

@@ -5,6 +5,8 @@ import { z } from "zod";
 import { classifyDuplicateStatus } from "@/lib/notarize";
 import { getReadContract } from "@/lib/zknotary-contract";
 
+export const runtime = "nodejs";
+
 const querySchema = z.object({
   hash: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
   wallet: z
