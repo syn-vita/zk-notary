@@ -84,38 +84,38 @@ function ProfileSettingsCard({
   }
 
   return (
-    <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+    <section className="rounded-card border border-ui-border bg-base p-6 shadow-card">
+      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
         Account settings
       </p>
-      <h2 className="mt-3 text-xl font-semibold text-slate-950">Display name</h2>
-      <p className="mt-3 text-sm leading-6 text-slate-600">
+      <h2 className="mt-2 text-[1.125rem] font-bold tracking-[-0.015em] text-ink">Display name</h2>
+      <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
         This label is shown only in your private owner-facing dashboard. Public
         verification continues to use wallet addresses only.
       </p>
-      <p className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+      <p className="mt-3 rounded-btn border border-ui-border bg-surface px-4 py-3 text-[0.875rem] text-ink-secondary">
         {profile?.displayName
           ? `Current private name: ${profile.displayName}`
           : `No private name saved yet. Your dashboard will fall back to ${fallbackLabel}.`}
       </p>
       <form onSubmit={handleSubmit} className="mt-5 space-y-3">
         <label className="block">
-          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
             Display name
           </span>
           <input
             value={displayName}
             onChange={(event) => setDisplayName(event.currentTarget.value)}
             maxLength={80}
-            className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
+            className="mt-2 w-full rounded-btn border border-ui-border bg-base px-4 py-3 text-[0.875rem] text-ink outline-none focus:border-action"
             placeholder="Giancarlo"
           />
         </label>
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {error ? <p className="text-[0.875rem] text-ui-error">{error}</p> : null}
         <button
           type="submit"
           disabled={saving || !displayName.trim()}
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white disabled:bg-slate-400"
+          className="rounded-btn bg-action px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90 disabled:opacity-50"
         >
           {saving ? "Saving..." : profile ? "Update display name" : "Save display name"}
         </button>
@@ -173,36 +173,36 @@ function SupersedeForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+    <form onSubmit={handleSubmit} className="mt-4 space-y-3 rounded-card border border-ui-border bg-surface p-4">
       <div>
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <label className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
           Shareable public note
         </label>
         <textarea
           value={publicNote}
           onChange={(event) => setPublicNote(event.currentTarget.value)}
           rows={2}
-          className="mt-2 w-full resize-none rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+          className="mt-2 w-full resize-none rounded-btn border border-ui-border bg-base px-3 py-2 text-[0.875rem] text-ink outline-none focus:border-action"
           placeholder="Optional note visible on proof-only public certificates"
         />
       </div>
       <div>
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <label className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
           Private owner note
         </label>
         <textarea
           value={privateNote}
           onChange={(event) => setPrivateNote(event.currentTarget.value)}
           rows={3}
-          className="mt-2 w-full resize-none rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+          className="mt-2 w-full resize-none rounded-btn border border-ui-border bg-base px-3 py-2 text-[0.875rem] text-ink outline-none focus:border-action"
           placeholder="Internal note kept off public verification surfaces"
         />
       </div>
-      {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+      {error ? <p className="text-[0.875rem] text-ui-error">{error}</p> : null}
       <button
         type="submit"
         disabled={saving}
-        className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white disabled:bg-slate-400"
+        className="rounded-btn bg-action px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90 disabled:opacity-50"
       >
         {saving ? "Saving..." : "Mark as superseded"}
       </button>
@@ -220,22 +220,22 @@ function AttestationCard({
   const [showSupersede, setShowSupersede] = useState(false);
 
   return (
-    <article className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
+    <article className="rounded-card border border-ui-border bg-base p-6 shadow-card">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
             {record.status === "superseded" ? "Superseded record" : "Active record"}
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-slate-950">{record.fileName}</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
+          <h2 className="mt-2 text-[1.125rem] font-bold tracking-[-0.015em] text-ink">{record.fileName}</h2>
+          <p className="mt-2 text-[0.875rem] leading-6 text-ink-secondary">
             {record.description ?? "No private description added."}
           </p>
         </div>
         <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
+          className={`rounded-btn px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.1em] ${
             record.status === "superseded"
-              ? "bg-amber-100 text-amber-800"
-              : "bg-emerald-100 text-emerald-800"
+              ? "bg-warning/10 text-warning"
+              : "bg-success/10 text-success"
           }`}
         >
           {record.status}
@@ -251,11 +251,11 @@ function AttestationCard({
           ["Tags", record.tags.length ? record.tags.join(", ") : "None"],
           ["Public note", record.publicSupersededNote ?? "None"]
         ].map(([label, value]) => (
-          <div key={label} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-            <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <div key={label} className="rounded-card border border-ui-border bg-surface px-4 py-3">
+            <dt className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
               {label}
             </dt>
-            <dd className="mt-2 break-all text-sm leading-6 text-slate-900">{value}</dd>
+            <dd className="mt-2 break-all text-[0.875rem] leading-6 text-ink">{value}</dd>
           </div>
         ))}
       </dl>
@@ -265,14 +265,14 @@ function AttestationCard({
           <button
             type="button"
             onClick={() => setShowSupersede((value) => !value)}
-            className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700"
+            className="rounded-btn border border-ui-border px-4 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink-secondary transition hover:border-ink-secondary"
           >
             {showSupersede ? "Hide supersede form" : "Mark as superseded"}
           </button>
           {showSupersede ? <SupersedeForm record={record} onSaved={onUpdated} /> : null}
         </div>
       ) : record.privateSupersededNote ? (
-        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm leading-6 text-amber-900">
+        <div className="mt-5 rounded-card border border-warning/30 bg-warning/5 px-4 py-4 text-[0.875rem] leading-6 text-warning">
           <p className="font-semibold">Private owner note</p>
           <p className="mt-1">{record.privateSupersededNote}</p>
         </div>
@@ -283,12 +283,12 @@ function AttestationCard({
 
 function DashboardFallback({ message }: { message: string }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr]">
-      <section className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
+    <div className="space-y-8">
+      <section className="rounded-card border border-ui-border bg-base p-8 shadow-card">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
           Dashboard
         </p>
-        <h1 className="mt-3 text-3xl font-semibold text-slate-950">{message}</h1>
+        <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">{message}</h1>
       </section>
       <TrustBanner
         title="Private metadata stays here"
@@ -420,22 +420,22 @@ export function DashboardWorkbench() {
 
   if (!authenticated) {
     return (
-      <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr]">
-        <section className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
+      <div className="space-y-8">
+        <section className="rounded-card border border-ui-border bg-base p-8 shadow-card">
+          <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
             Dashboard
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-950">
+          <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
             Sign in to view your private attestation archive.
           </h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+          <p className="mt-4 max-w-2xl text-[0.875rem] leading-7 text-ink-secondary">
             Public verification is proof-only. File names, descriptions, tags, and
             private notes live here behind owner authentication.
           </p>
           <button
             type="button"
             onClick={() => login()}
-            className="mt-6 rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
+            className="mt-6 rounded-btn bg-action px-5 py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
           >
             Sign in with Privy
           </button>
@@ -449,105 +449,104 @@ export function DashboardWorkbench() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr]">
-      <section className="space-y-6">
-        <div className="rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-xl shadow-blue-950/5">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
-            Dashboard
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-950">
-            Private evidence archive for {ownerLabel}.
-          </h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Your private display name stays inside authenticated owner views and never
-            appears on public proof pages.
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.currentTarget.value)}
-              placeholder="Search by file name, description, tag, or reference"
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
-            />
-            <select
-              value={statusFilter}
-              onChange={(event) =>
-                setStatusFilter(event.currentTarget.value as "all" | "active" | "superseded")
-              }
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-400"
-            >
-              <option value="all">All records</option>
-              <option value="active">Active</option>
-              <option value="superseded">Superseded</option>
-            </select>
-          </div>
-        </div>
-
-        {state.status === "error" ? (
-          <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-800">
-            {state.error}
-          </div>
-        ) : null}
-
-        {state.status === "loading" ? (
-          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
-            Loading your attestation archive...
-          </div>
-        ) : null}
-
-        {state.status !== "loading" && filteredRecords.length === 0 ? (
-          <div className="rounded-3xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
-            No matching attestations found.
-          </div>
-        ) : null}
-
-        {filteredRecords.map((record) => (
-          <AttestationCard
-            key={record.id}
-            record={record}
-            onUpdated={(updatedRecord) => {
-              setState((current) => ({
-                ...current,
-                records: current.records.map((record) =>
-                  record.id === updatedRecord.id ? updatedRecord : record
-                )
-              }));
-            }}
+    <div className="space-y-8">
+      <div className="rounded-card border border-ui-border bg-base p-8 shadow-card">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          Dashboard
+        </p>
+        <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
+          Private evidence archive for {ownerLabel}.
+        </h1>
+        <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
+          Your private display name stays inside authenticated owner views and never
+          appears on public proof pages.
+        </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+            placeholder="Search by file name, description, tag, or reference"
+            className="rounded-btn border border-ui-border bg-surface px-4 py-3 text-[0.875rem] text-ink outline-none focus:border-action"
           />
-        ))}
-      </section>
+          <select
+            value={statusFilter}
+            onChange={(event) =>
+              setStatusFilter(event.currentTarget.value as "all" | "active" | "superseded")
+            }
+            className="rounded-btn border border-ui-border bg-surface px-4 py-3 text-[0.875rem] text-ink outline-none focus:border-action"
+          >
+            <option value="all">All records</option>
+            <option value="active">Active</option>
+            <option value="superseded">Superseded</option>
+          </select>
+        </div>
+      </div>
 
-      <div className="space-y-6">
-        <ProfileSettingsCard
-          profile={profileState.profile}
-          walletAddress={preferredWallet?.address ?? null}
-          onSaved={(profile) => {
-            setProfileState({
-              status: "ready",
-              profile,
-              error: null
-            });
+      <ProfileSettingsCard
+        profile={profileState.profile}
+        walletAddress={preferredWallet?.address ?? null}
+        onSaved={(profile) => {
+          setProfileState({
+            status: "ready",
+            profile,
+            error: null
+          });
+        }}
+      />
+
+      {state.status === "error" ? (
+        <div className="rounded-card border border-ui-error/30 bg-ui-error/5 px-5 py-4 text-[0.875rem] text-ui-error">
+          {state.error}
+        </div>
+      ) : null}
+
+      {profileState.status === "error" ? (
+        <div className="rounded-card border border-ui-error/30 bg-ui-error/5 px-5 py-4 text-[0.875rem] text-ui-error">
+          {profileState.error}
+        </div>
+      ) : null}
+
+      {state.status === "loading" ? (
+        <div className="rounded-card border border-ui-border bg-surface px-5 py-4 text-[0.875rem] text-ink-secondary">
+          Loading your attestation archive...
+        </div>
+      ) : null}
+
+      {state.status !== "loading" && filteredRecords.length === 0 ? (
+        <div className="rounded-card border border-ui-border bg-surface px-5 py-4 text-[0.875rem] text-ink-secondary">
+          No matching attestations found.
+        </div>
+      ) : null}
+
+      {filteredRecords.map((record) => (
+        <AttestationCard
+          key={record.id}
+          record={record}
+          onUpdated={(updatedRecord) => {
+            setState((current) => ({
+              ...current,
+              records: current.records.map((record) =>
+                record.id === updatedRecord.id ? updatedRecord : record
+              )
+            }));
           }}
         />
-        <TrustBanner
-          title="Proof-only public pages"
-          body="Public verification and receipt pages intentionally hide filename, description, tags, and private notes. Only the owner dashboard reveals that metadata."
-        />
-        {profileState.status === "error" ? (
-          <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-800">
-            {profileState.error}
-          </div>
-        ) : null}
-        <section className="rounded-[2rem] border border-[color:var(--border)] bg-white p-6 shadow-xl shadow-blue-950/5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Supersession guidance
-          </p>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Use a public note only when external reviewers need a brief status context.
-            Keep case details, client names, and internal reasoning in the private note.
-          </p>
-        </section>
-      </div>
+      ))}
+
+      <TrustBanner
+        title="Proof-only public pages"
+        body="Public verification and receipt pages intentionally hide filename, description, tags, and private notes. Only the owner dashboard reveals that metadata."
+      />
+
+      <section className="rounded-card border border-ui-border bg-base p-6 shadow-card">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          Supersession guidance
+        </p>
+        <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
+          Use a public note only when external reviewers need a brief status context.
+          Keep case details, client names, and internal reasoning in the private note.
+        </p>
+      </section>
     </div>
   );
 }
