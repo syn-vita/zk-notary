@@ -15,11 +15,11 @@ function outcomeStyle(outcome: VerificationOutcome): {
 } {
   switch (outcome) {
     case "exact-attestation":
-      return { badge: "Verified attestation", className: "bg-success/10 text-success" };
+      return { badge: "Proof verified", className: "bg-success/10 text-success" };
     case "hash-with-other-attestations":
-      return { badge: "Multiple attestations found", className: "bg-action/10 text-action" };
+      return { badge: "Multiple proofs found", className: "bg-action/10 text-action" };
     case "superseded-valid":
-      return { badge: "Superseded but valid", className: "bg-warning/10 text-warning" };
+      return { badge: "Superseded — still valid", className: "bg-warning/10 text-warning" };
     default:
       return { badge: "Verification result", className: "bg-surface text-ink-secondary" };
   }
@@ -48,11 +48,11 @@ export function VerificationCertificate({
     <section className="rounded-card border border-ui-border bg-base p-8 shadow-card">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+          <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-warm">
             Public certificate
           </p>
           <h2 className="mt-2 text-[1.25rem] font-bold tracking-[-0.015em] text-ink">
-            Proof of attestation
+            Proof of notarization
           </h2>
           <p className="mt-3 max-w-2xl text-[0.875rem] leading-6 text-ink-secondary">
             {buildVerificationSummary(summaryRecord)}
@@ -70,8 +70,8 @@ export function VerificationCertificate({
           label="Owner-provided public name"
           value={record.publicDisplayName ?? "Not shared"}
         />
-        <DataField label="Attestation reference" value={record.attestationRef} mono />
-        <DataField label="Document hash" value={record.documentHash} mono />
+        <DataField label="Proof reference" value={record.attestationRef} mono />
+        <DataField label="Document fingerprint" value={record.documentHash} mono />
         <DataField label="Wallet" value={record.attestingWallet} mono />
         <DataField
           label="Recorded at"
@@ -94,7 +94,7 @@ export function VerificationCertificate({
       {relatedRecords.length > 0 ? (
         <div className="mt-8 rounded-card border border-ui-border bg-surface px-5 py-5">
           <p className="text-[0.875rem] font-semibold text-ink">
-            Other attestations for the same file hash
+            Other notarizations for the same document
           </p>
           <ul className="mt-3 space-y-3">
             {relatedRecords.map((related) => (

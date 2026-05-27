@@ -4,26 +4,25 @@ type VerificationExplainerProps = {
 
 const copy = {
   "exact-attestation":
-    "This certificate points to a specific attestation reference. Reviewers can compare the file hash, wallet, timestamp, and transaction link.",
+    "This proof is tied to a specific notarization. Anyone can confirm the document fingerprint, the wallet that signed it, and the exact time it was recorded.",
   "hash-with-other-attestations":
-    "The uploaded file hash matches more than one attestation. zkNotary highlights one record and lists the others so reviewers can inspect each wallet and timestamp.",
+    "The document you uploaded matches more than one notarization record. zkNotary highlights one and lists the others so you can inspect each one.",
   "superseded-valid":
-    "The chain proof is still valid, but the attestation owner has marked this record as superseded in the application layer.",
+    "The proof is still valid on-chain, but the owner has marked this record as superseded — meaning they've replaced or updated it.",
   "not-found":
-    "No matching attestation record was found for the supplied reference or file hash.",
+    "No notarization record was found for this document or reference code.",
 } as const;
 
 export function VerificationExplainer({ outcome }: VerificationExplainerProps) {
   return (
     <details className="mt-8 rounded-card border border-ui-border bg-base p-6 shadow-card">
       <summary className="cursor-pointer text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-action">
-        Verification explainer
+        What does this proof mean?
       </summary>
       <p className="mt-4 text-[0.875rem] leading-6 text-ink-secondary">{copy[outcome]}</p>
       <p className="mt-3 text-[0.875rem] leading-6 text-ink-secondary">
-        zkNotary proves that a wallet-authorized attestation for this file hash
-        was recorded on Sepolia. It does not prove authorship, truthfulness, or
-        legal validity by itself.
+        zkNotary proves a document fingerprint was recorded on Ethereum at a specific
+        time. It doesn't prove authorship, truthfulness, or legal validity on its own.
       </p>
     </details>
   );

@@ -3,7 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { TrustBanner } from "@/components/trust-banner";
 import { VerificationCertificate } from "@/components/verification-certificate";
 import { VerificationExplainer } from "@/components/verification-explainer";
 import type { VerificationLookupResponse } from "@/lib/domain";
@@ -127,15 +126,14 @@ export function VerifyWorkbench() {
       <form onSubmit={handleLookup} className="rounded-card border border-ui-border bg-base p-8 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-warm">
               Verify
             </p>
             <h1 className="mt-2 text-[1.75rem] font-extrabold tracking-[-0.025em] text-ink">
-              Check a specific attestation or compare a file hash.
+              Check if a document has been notarized.
             </h1>
             <p className="mt-3 max-w-2xl text-[0.875rem] leading-6 text-ink-secondary">
-              Public verification is intentionally proof-only. zkNotary does not
-              reveal filenames, descriptions, tags, or private notes on this page.
+              Anyone can verify a proof here. No account needed. Private details stay private. zkNotary proves a specific document fingerprint was recorded on Ethereum at a specific time, authorized by a specific wallet.
             </p>
           </div>
           <div className="flex rounded-btn border border-ui-border bg-surface p-1">
@@ -164,10 +162,10 @@ export function VerifyWorkbench() {
         <div className="mt-8 space-y-6">
           {mode === "file" ? (
             <label className="block rounded-card border border-dashed border-tint bg-surface p-6">
-              <span className="text-[0.875rem] font-semibold text-ink">Upload a file to hash locally</span>
+              <span className="text-[0.875rem] font-semibold text-ink">Upload the document to check</span>
               <p className="mt-2 text-[0.875rem] leading-6 text-ink-secondary">
-                The original file stays in your browser. zkNotary compares the
-                computed hash against stored attestation records.
+                Your file stays in your browser. We'll compute its fingerprint and
+                check if it's been notarized.
               </p>
               <input
                 type="file"
@@ -189,7 +187,7 @@ export function VerifyWorkbench() {
                 />
               </div>
               <p className="mt-3 font-mono text-[0.75rem] text-accent">
-                {computedHash ?? "Choose a file to compute its hash."}
+                {computedHash ?? "Choose a file to get started."}
               </p>
               {hashError ? (
                 <p className="mt-2 text-[0.875rem] text-ui-error">{hashError}</p>
@@ -199,7 +197,7 @@ export function VerifyWorkbench() {
             <div className="grid gap-4">
               <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
                 <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
-                  Attestation reference
+                  Proof reference code
                 </span>
                 <input
                   value={referenceInput}
@@ -211,7 +209,7 @@ export function VerifyWorkbench() {
 
               <label className="block rounded-card border border-ui-border bg-surface px-5 py-4">
                 <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
-                  Document hash
+                  Document fingerprint
                 </span>
                 <input
                   value={hashInput}
@@ -225,9 +223,9 @@ export function VerifyWorkbench() {
 
           <button
             type="submit"
-            className="rounded-btn bg-action px-5 py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
+            className="btn-warm px-5 py-2.5"
           >
-            {lookupState.status === "loading" ? "Checking records…" : "Verify attestation"}
+            {lookupState.status === "loading" ? "Checking…" : "Check this document"}
           </button>
 
           {lookupState.status === "error" ? (
@@ -246,21 +244,14 @@ export function VerifyWorkbench() {
 
       {lookupState.status === "ready" && !lookupState.data.primaryRecord ? (
         <div className="rounded-card border border-ui-border bg-base px-6 py-5 text-[0.875rem] leading-6">
-          <p className="font-semibold text-ink">No record found</p>
+          <p className="font-semibold text-ink">No proof found</p>
           <p className="mt-2 text-ink-secondary">
-            zkNotary could not find an attestation for the supplied reference or file hash.
-          </p>
-          <p className="mt-2 text-ink-secondary">
-            Retry with a direct attestation reference, or upload the original file so the
-            browser computes its hash locally.
+            No notarization record matches this document or reference. Double-check the
+            reference code, or upload the original file.
           </p>
         </div>
       ) : null}
 
-      <TrustBanner
-        title="What public verification proves"
-        body="zkNotary verifies that a wallet-authorized attestation for a specific file hash exists on Sepolia. It does not prove authorship, truthfulness, or legal status by itself."
-      />
 
       {lookupState.status === "ready" ? (
         <VerificationExplainer outcome={lookupState.data.outcome} />
