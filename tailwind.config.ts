@@ -17,13 +17,14 @@ const config: Config = {
         success:         "var(--color-success)",
         warning:         "var(--color-warning)",
         "ui-error":      "var(--color-error)",
+        warm:            "var(--color-warm)",
       },
       borderRadius: {
         card: "0.75rem",
         btn:  "0.375rem",
       },
       boxShadow: {
-        card: "0 1px 3px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.04)",
+        card: "0 1px 4px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.06)",
       },
       fontFamily: {
         mono: ["var(--font-ibm-plex-mono)", "Fira Code", "monospace"],
