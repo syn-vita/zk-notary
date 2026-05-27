@@ -25,10 +25,6 @@ export function PageShell({
   const pathname = usePathname();
 
   function handleBack() {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      router.back();
-      return;
-    }
     router.push("/");
   }
 
@@ -52,7 +48,7 @@ export function PageShell({
           )}
           <Link
             href="/"
-            className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-ink"
+            className="border-l-2 border-warm pl-2 text-[1rem] font-extrabold tracking-[-0.01em] text-ink"
           >
             zkNotary
           </Link>
@@ -73,7 +69,7 @@ export function PageShell({
           </Link>
           <Link
             href="/notarize"
-            className={`rounded-btn px-3 py-1.5 text-[0.75rem] font-bold uppercase tracking-[0.06em] transition ${pathname === "/notarize" ? "bg-action/80 text-white" : "bg-action text-white hover:bg-action/90"}`}
+            className={`btn-warm px-3 py-1.5 ${pathname === "/notarize" ? "!bg-warm !text-white" : ""}`}
           >
             Notarize
           </Link>
@@ -89,6 +85,18 @@ export function PageShell({
       <main className="mx-auto w-full max-w-[1120px] flex-1 px-6 py-10">
         {children}
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-ui-border px-6 py-4">
+        <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-3">
+          <span className="text-[0.6875rem] font-bold tracking-[-0.01em] text-ink">
+            zkNotary
+          </span>
+          <p className="text-[0.6875rem] leading-5 text-muted">
+            Proves a document fingerprint was recorded on Ethereum at a specific time. Does not prove authorship, truthfulness, or legal enforceability.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
