@@ -101,7 +101,7 @@ export function CertificateActions({
         <button
           type="button"
           onClick={handlePrint}
-          className="rounded-btn bg-action px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-action/90"
+          className="btn-warm px-4 py-2"
         >
           Save or print PDF
         </button>

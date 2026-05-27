@@ -43,7 +43,7 @@ export default async function ReceiptPage({ params }: ReceiptPageProps) {
             </p>
             <Link
               href="/notarize"
-              className="mt-6 inline-flex rounded-btn bg-action px-4 py-2 text-[0.75rem] font-bold uppercase tracking-[0.06em] text-white"
+              className="btn-warm mt-6 px-4 py-2"
             >
               Back to notarize
             </Link>
