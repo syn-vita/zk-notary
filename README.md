@@ -95,7 +95,7 @@ profile name.
 - `src/app/`
   Next.js App Router pages and API routes
 - `src/components/`
-  UI workbenches, certificates, navigation, and shared UI pieces
+  UI workbenches, page shell, certificates, navigation, and shared UI pieces
 - `src/lib/`
   domain types, attestation helpers, Supabase access, profile logic, and chain helpers
 - `contracts/`
@@ -252,6 +252,43 @@ API:
 - `/api/dashboard/attestations/[id]`
 - `/api/dashboard/profile`
 
+## Current UI Structure
+
+The current frontend is organized around a shared page shell and route-specific
+workbenches.
+
+### Shared shell
+
+Internal application routes use a shared `PageShell` layout component that
+provides:
+- top navigation
+- route-level back/home affordances
+- optional step-indicator support
+- a consistent content width
+- a shared footer disclaimer
+
+### Main workbenches
+
+- `NotarizeWorkbench`
+  Handles file selection, local hashing, duplicate checks, optional public-name
+  opt-in, wallet authorization, and sponsored submission.
+- `VerifyWorkbench`
+  Handles verification by uploaded file, attestation reference, or document hash.
+- `DashboardWorkbench`
+  Handles the private archive, owner profile name editing, record review, file
+  cross-check modal, and supersession management.
+- `ReceiptCard` and `VerificationCertificate`
+  Render the proof-oriented public surfaces for a stored attestation.
+
+### Interaction pattern
+
+The UI is currently more editorial and app-shell oriented than the earlier
+minimal layout. A redesign or polish pass should expect:
+- route shells wrapping the core workbench components
+- modal interactions inside dashboard flows
+- richer status messaging during hashing, submission, and verification
+- consistent owner/private versus public/proof surface separation
+
 ## Current UX Constraints
 
 If you redesign the UI, preserve these rules:
@@ -260,6 +297,8 @@ If you redesign the UI, preserve these rules:
 - private profile name is not public by default
 - public display name remains a per-attestation opt-in snapshot
 - dashboard remains the owner-only metadata surface
+- internal routes currently share a common shell and should continue to feel like
+  one coherent application rather than disconnected standalone pages
 
 ## Notes
 
